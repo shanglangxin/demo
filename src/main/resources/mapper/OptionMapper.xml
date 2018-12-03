@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.OptionMapper">
+    <insert id="addOptions" parameterType="java.util.Map">
+        INSERT INTO `option`(name,question_id) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{id})
+        </foreach>
+    </insert>
+</mapper>

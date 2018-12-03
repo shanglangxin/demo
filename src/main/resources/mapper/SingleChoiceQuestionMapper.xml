@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.SingleChoiceQuestionMapper">
+
+    <insert id="addSingleChoiceQuestion" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="param.id">
+        INSERT INTO ${param.table}(title, answer, creator, create_time, show_title) VALUES(#{param.title}, #{param.singleAnswer}, #{param.creator}, #{param.createTime}, #{param.showTitle})
+    </insert>
+
+    <select id="querySingleChoiceQuestion" resultType="com.example.demo.pojo.Question">
+        SELECT * FROM single_choice_question
+         <where>
+             <if test="date != null">
+                 DATE_FORMAT(create_time,'%Y-%m-%d') LIKE DATE_FORMAT(#{date},'%Y-%m-%d')
+             </if>
+             <if test="creator != '' and creator != null">
+                 AND creator LIKE CONCAT("%",#{creator},"%")
+             </if>
+             <if test="subject != null">
+                 AND subject_id = #{subject}
+             </if>
+         </where>
+    </select>
+
+</mapper>
