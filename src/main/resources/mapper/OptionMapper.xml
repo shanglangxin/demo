@@ -3,10 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.OptionMapper">
+
     <insert id="addOptions" parameterType="java.util.Map">
-        INSERT INTO `option`(name,question_id) VALUES
+        INSERT INTO `option`(name,question_id, question_type) VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.name}, #{id})
+            (#{item.name}, #{id}, #{type})
         </foreach>
     </insert>
+
+    <delete id="deleteOptionByQuestionId" parameterType="java.lang.Integer">
+        DELETE FROM `option` WHERE question_id=#{id} AND question_type=#{type}
+    </delete>
+
+    <select id="queryOptionListByQuestionId" resultType="com.example.demo.pojo.Option">
+        SELECT id, name, question_id questionId, question_type questionType FROM `option` WHERE question_id=#{id} AND question_type=#{type}
+    </select>
+
+    <delete id="deleteOptionByQuestionIds" parameterType="java.lang.Integer">
+        DELETE FROM `option` WHERE question_type=#{type} AND question_id IN
+        <foreach collection="ids" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

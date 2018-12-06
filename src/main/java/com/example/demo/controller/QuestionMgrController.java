@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.QestionDTO;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.SearchQuesiotnDTO;
 import com.example.demo.pojo.Account;
 import com.example.demo.pojo.Question;
@@ -9,9 +12,8 @@ import com.example.demo.service.IQuestionMgrService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.Result;
 import com.example.demo.util.ResultUtil;
-import com.github.pagehelper.PageHelper;
+import com.example.demo.vo.QuestionDetailVO;
 import com.github.pagehelper.PageInfo;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,19 +31,21 @@ public class QuestionMgrController extends BaseController {
     private IQuestionMgrService questionMgrService;
 
     @ResponseBody
-    @PostMapping(value = "/addQuestion")
-    public Result addQuestion(@RequestBody QestionDTO dto) throws MyException {
+    @PostMapping(value = "/addOrUpdateQuestion")
+    public Result addQuestion(@RequestBody QuestionDTO dto) throws MyException {
         Account user = getUser();
         Map<String, Object> param = new HashMap<>();
+        param.put("id",dto.getId());
         param.put("title", dto.getTitle());
         param.put("type", dto.getType());
         param.put("multiAnswer", dto.getMultiAnswer());
         param.put("singleAnswer", dto.getSingleAnswer());
+        param.put("subjectId", dto.getSubjectId());
         param.put("list", dto.getOptionList());
         param.put("showTitle", dto.getShowTitle());
         param.put("creator",user.getName());
         param.put("createTime", new Date());
-        questionMgrService.addQuestion(param);
+        questionMgrService.addOrUpdateQuestion(param);
         return ResultUtil.success();
     }
 
@@ -65,8 +69,37 @@ public class QuestionMgrController extends BaseController {
         param.put("creator", dto.getCreator());
         param.put("subject", dto.getSubject());
         param.put("page", 1);
-        List<Question> list = questionMgrService.queryQuestionList(param);
+        List<QuestionDetailVO> list = questionMgrService.queryQuestionList(param);
         return ResultUtil.addResult(new PageInfo(list));
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/updateQuestion", method=RequestMethod.POST)
+    public Result updateQuestion(QuestionDTO dto){
+        Map<String, Object> param = new HashMap<>();
+        param.put("id",dto.getId());
+        param.put("title", dto.getTitle());
+        param.put("type", dto.getType());
+        param.put("multiAnswer", dto.getMultiAnswer());
+        param.put("singleAnswer", dto.getSingleAnswer());
+        param.put("list", dto.getOptionList());
+        param.put("subjectId", dto.getSubjectId());
+        param.put("showTitle", dto.getShowTitle());
+        questionMgrService.updateQuestion(param);
+        return ResultUtil.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/deleteQuestion", method=RequestMethod.POST)
+    public Result deleteQuestion(@RequestBody String param){
+        JSONObject param1 = JSON.parseObject(param);
+        JSONArray idArray = (JSONArray) param1.get("ids");
+        Integer type = (Integer) param1.get("type");
+        Map<String, Object> map = new HashMap<>();
+        map.put("ids", idArray);
+        map.put("type", type);
+        questionMgrService.deleteQuestion(map);
+        return ResultUtil.success();
     }
 
 }

@@ -3,7 +3,7 @@ package com.example.demo.dto;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-public class QestionDTO {
+public class QuestionDTO {
 
     private Integer id;
 
@@ -19,6 +19,8 @@ public class QestionDTO {
     private Integer type;
 
     private String showTitle;
+
+    private Integer subjectId;
 
     public Integer getType() {
         return type;
@@ -74,5 +76,13 @@ public class QestionDTO {
 
     public void setShowTitle(String showTitle) {
         this.showTitle = showTitle;
+    }
+
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
     }
 }

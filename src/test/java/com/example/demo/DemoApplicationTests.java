@@ -2,7 +2,9 @@ package com.example.demo;
 
 import com.example.demo.controller.SpringController;
 import com.example.demo.dto.OptionDTO;
+import com.example.demo.service.IPaperMgrService;
 import com.example.demo.service.IQuestionMgrService;
+import com.example.demo.util.MyException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +34,8 @@ public class DemoApplicationTests {
 	private MockMvc mockMvc;
 	@Autowired
 	private IQuestionMgrService questionMgrService;
+	@Autowired
+	private IPaperMgrService paperMgrService;
 
 	@Before
 	public void setUp(){
@@ -64,10 +68,23 @@ public class DemoApplicationTests {
 		optionDTO.setQuestionId(2);
 		list.add(optionDTO);
 		param.put("list",list);
-		questionMgrService.addQuestion(param);
+//		questionMgrService.addQuestion(param);
 		System.out.println("------------------------------------");
 		System.out.println(param.get("id"));
 		System.out.println("------------------------------------");
+	}
+
+	@Test
+	public void testAddOrUpdate() throws MyException {
+		Map<String, Object> param = new HashMap<>();
+		param.put("approach", 0);
+		param.put("singleChoiceCount", 1);
+		param.put("multiChoiceCount", 1);
+		param.put("multiEntryCount", 1);
+		param.put("judgeCount", 1);
+		param.put("completionCount", 1);
+		param.put("subjectId", 1);
+		paperMgrService.addOrUpdatePaper(param);
 	}
 
 }

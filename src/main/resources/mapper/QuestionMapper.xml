@@ -6,10 +6,10 @@
 <mapper namespace="com.example.demo.mapper.QuestionMapper">
 
     <insert id="addQuestion" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="param.id">
-        INSERT INTO ${param.table}(title, answer, creator, create_time, show_title) VALUES(#{param.title}, #{param.singleAnswer}, #{param.creator}, #{param.createTime}, #{param.showTitle})
+        INSERT INTO ${param.table}(title, answer, creator, create_time, show_title, subject_id, type) VALUES(#{param.title}, #{param.answer}, #{param.creator}, #{param.createTime}, #{param.showTitle}, #{param.subjectId}, #{param.type})
     </insert>
 
-    <select id="queryQuestion" resultType="com.example.demo.pojo.Question">
+    <select id="queryQuestion" resultType="com.example.demo.vo.QuestionDetailVO">
         SELECT * FROM ${table}
          <where>
              <if test="date != null">
@@ -22,6 +22,32 @@
                  AND subject_id = #{subject}
              </if>
          </where>
+    </select>
+
+    <update id="updateQuestion" parameterType="map">
+        UPDATE ${table} SET title=#{title}, show_title=#{showTitle}, answer=#{answer}, subject_id=#{subjectid} WHERE id=#{id}
+    </update>
+
+    <delete id="deleteQuestion" parameterType="map">
+        DELETE FROM ${table} WHERE id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryQuestionTotalNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM ${table}
+    </select>
+
+    <select id="queryQuestionList" resultType="com.example.demo.vo.QuestionDetailVO">
+        SELECT * FROM ${table} WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="queryQuestionIdList" resultType="java.lang.Integer">
+        SELECT id FROM ${table} WHERE subject_id=#{subjectId}
     </select>
 
 </mapper>

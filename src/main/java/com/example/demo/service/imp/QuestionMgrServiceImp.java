@@ -1,15 +1,16 @@
 package com.example.demo.service.imp;
 
 import com.example.demo.mapper.*;
-import com.example.demo.pojo.Question;
+import com.example.demo.pojo.Option;
 import com.example.demo.pojo.SubjectPO;
 import com.example.demo.service.IQuestionMgrService;
-import com.example.demo.util.MyException;
 import com.example.demo.util.QuestionTypeUtil;
+import com.example.demo.vo.QuestionDetailVO;
 import com.github.pagehelper.PageHelper;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
@@ -35,10 +36,18 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
     private QuestionMapper questionMapper;
 
     @Override
-    public void addQuestion(Map<String, Object> param) {
+    @Transactional
+    public void addOrUpdateQuestion(Map<String, Object> param) {
         String table = queryQuestionTable((Integer) param.get("type"));
         param.put("table",table);
-        questionMapper.addQuestion(param);
+        this.handleQuestionAnswer(param);
+        Integer id = (Integer) param.get("id");
+        if(param.get("id") == null){
+            questionMapper.addQuestion(param);
+        }else{
+            questionMapper.updateQuestion(param);
+            optionMapper.deleteOptionByQuestionId(param);
+        }
         if(param.get("type").equals(QuestionTypeUtil.SINGLE_CHOICE_QUESTION) || param.get("type").equals(QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION)){
             optionMapper.addOptions(param);
         }
@@ -52,16 +61,48 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
     }
 
     @Override
-    public List<Question> queryQuestionList(Map<String, Object> param) {
-        List<Question> list = new ArrayList<>();
-        if(param.get("type") == null && param.get("type").equals("")){
+    public List<QuestionDetailVO> queryQuestionList(Map<String, Object> param) {
+        List<QuestionDetailVO> list = new ArrayList<>();
+        Integer type = (Integer) param.get("type");
+        if(type == null){
 //            throw new MyException(-1,"选择查询题型");
         }
         String table = queryQuestionTable((Integer) param.get("type"));
         param.put("table",table);
         PageHelper.startPage((Integer) param.get("page"), 30);
         list = questionMapper.queryQuestion(param);
+        if(type == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || type == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+            for(QuestionDetailVO vo : list){
+                List<Option> optionList = optionMapper.queryOptionListByQuestionId(vo);
+                vo.setOptionList(optionList);
+            }
+        }
+
         return list;
+    }
+
+    @Override
+    @Transactional
+    public void updateQuestion(Map<String, Object> param) {
+        String table = queryQuestionTable((Integer) param.get("type"));
+        param.put("table",table);
+        this.handleQuestionAnswer(param);
+        questionMapper.updateQuestion(param);
+        if(param.get("type").equals(QuestionTypeUtil.SINGLE_CHOICE_QUESTION) || param.get("type").equals(QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION)){
+            optionMapper.deleteOptionByQuestionId(param);
+            optionMapper.addOptions(param);
+        }
+    }
+
+    @Override
+    public void deleteQuestion(Map<String, Object> param) {
+        Integer type = (Integer) param.get("type");
+        String table = this.queryQuestionTable(type);
+        param.put("table", table);
+        if(type.equals(QuestionTypeUtil.SINGLE_CHOICE_QUESTION) || type.equals(QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION)){
+            optionMapper.deleteOptionByQuestionIds(param);
+        }
+        questionMapper.deleteQuestion(param);
     }
 
     private String queryQuestionTable(Integer type){
@@ -79,6 +120,19 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
         }
         return tableName;
     }
+
+    private void handleQuestionAnswer(Map<String, Object> param){
+        Integer type = (Integer) param.get("type");
+        if(type == QuestionTypeUtil.COMPLETION_QUESTION || type == QuestionTypeUtil.JUDGE_QUESTION || type == QuestionTypeUtil.SINGLE_CHOICE_QUESTION){
+            String answer = (String) param.get("singleAnswer");
+            param.put("answer", answer);
+        }else if(type == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION || type == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
+            List<String> multiple = (List<String>) param.get("multiAnswer");
+            String answer = StringUtils.join(multiple, ',');
+            param.put("answer", answer);
+        }
+    }
+
 
 
 
