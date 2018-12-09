@@ -101,7 +101,8 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 	@Override
 	public PaperDetailVO queryPaperDetail(Integer paperId) {
 		// TODO Auto-generated method stub
-		return null;
+		PaperDetailVO paperDetailVO = paperMapper.queryPaperById(paperId);
+		return paperDetailVO;
 	}
     
 	/**

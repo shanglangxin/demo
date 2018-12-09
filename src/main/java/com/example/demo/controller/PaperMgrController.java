@@ -17,6 +17,7 @@ import com.github.pagehelper.PageHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping(value="/paper/mgr")
 public class PaperMgrController extends BaseController {
@@ -36,11 +39,14 @@ public class PaperMgrController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value="/addOrUpdatePaper", method=RequestMethod.POST)
-    public Result addOrUpdatePaper(@RequestBody PaperDTO dto) throws MyException {
+    public Result addOrUpdatePaper(@RequestBody @Valid PaperDTO dto, BindingResult result) throws MyException {
         Map<String, Object> param = new HashMap<>();
         param.put("id", dto.getId());
         param.put("title", dto.getTitle());
-        param.put("approach", dto.getApproach());
+        param.put("duration", dto.getDuration());
+        param.put("startTime", dto.getStartTime());
+        param.put("endTime", dto.getEndTime());
+//        param.put("approach", dto.getApproach());
 //        param.put("singleChoiceCount", dto.getSingleChoiceCount());
 //        param.put("multiChoiceCount", dto.getMultiChoiceCount());
 //        param.put("multiEntryCount", dto.getMultiEntryCount());
