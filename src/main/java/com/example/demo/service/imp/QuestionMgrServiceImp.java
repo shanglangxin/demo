@@ -41,6 +41,7 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
         String table = queryQuestionTable((Integer) param.get("type"));
         param.put("table",table);
         this.handleQuestionAnswer(param);
+        this.handleAnswer(param);
         Integer id = (Integer) param.get("id");
         if(param.get("id") == null){
             questionMapper.addQuestion(param);
@@ -132,6 +133,27 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
             param.put("answer", answer);
         }
     }
+    
+    private void handleAnswer(Map<String, Object> param){
+    	Integer type = (Integer) param.get("type");
+    	if(type == QuestionTypeUtil.COMPLETION_QUESTION){
+            param.put("answer", param.get("singleAnswer"));
+        }else if(type == QuestionTypeUtil.JUDGE_QUESTION){
+        	param.put("answer", param.get("singleAnswer"));
+        }else if(type == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+            List<String> list = (List<String>) param.get("multiAnswer");
+            String answer = StringUtils.join(list,',');
+            param.put("answer", answer);
+        }else if(type == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
+        	List<String> list = (List<String>) param.get("multiAnswer");
+            String answer = StringUtils.join(list,',');
+            param.put("answer", answer);
+        }else if(type == QuestionTypeUtil.SINGLE_CHOICE_QUESTION){
+        	param.put("answer", param.get("singleAnswer"));
+        }
+    }
+ 
+
 
 
 
