@@ -32,7 +32,7 @@ public class QuestionMgrController extends BaseController {
 
     @ResponseBody
     @PostMapping(value = "/addOrUpdateQuestion")
-    public Result addQuestion(@RequestBody QuestionDTO dto) throws MyException {
+    public Result addOrUpdateQuestion(@RequestBody QuestionDTO dto) throws MyException {
         Account user = getUser();
         Map<String, Object> param = new HashMap<>();
         param.put("id",dto.getId());

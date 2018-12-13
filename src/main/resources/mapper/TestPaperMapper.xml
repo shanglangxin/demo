@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestPaperMapper">
+
+    <insert id="addPaper" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="param.id">
+        INSERT INTO test_paper(title, subject_id, total_mark, duration, start_time, end_time, creator, create_time, status)
+           VALUES(#{param.title}, #{param.subjectId}, #{param.totalMark}, #{param.duration}, #{param.startTime}, #{param.endTime}, #{param.creator}, #{param.createTime}, #{param.status})
+    </insert>
+
+    <update id="updateTestPaper" parameterType="map">
+        UPDATE test_paper SET title=#{title}, subject_id=#{subjectId}, total_mark=#{totalMark}, duration=#{duration},
+         start_time=#{startTime}, end_time=#{endTime}, status=#{status}  WHERE id=#{id}
+    </update>
+
+    <select id="queryPaperList" resultType="com.example.demo.pojo.TestPaperPO">
+        SELECT * FROM test_paper
+        <where>
+            <if test="title != null and title != ''">
+                title LIKE CONCAT("%",#{title},"%")
+            </if>
+            <if test="subjectId != null and subjectId > 0">
+                AND subject_id=#{subjectId}
+            </if>
+            <if test="status != null">
+                AND status=#{status}
+            </if>
+            <if test="creator != null and creator != ''">
+                AND creator LIKE CONCAT("%",#{creator},"%")
+            </if>
+            <if test="createTime != null">
+                AND DATE_FORMAT(create_time,'%Y-%m-%d') LIKE DATE_FORMAT(#{createTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="queryTestPaperById" resultType="com.example.demo.vo.TestPaperDetailVO">
+        SELECT * FROM test_paper WHERE id = #{paperId}
+    </select>
+
+</mapper>

@@ -1,17 +1,16 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.dto.PaperDTO;
-import com.example.demo.dto.PaperSearchDTO;
+import com.example.demo.dto.TestPaperDTO;
+import com.example.demo.dto.TestPaperSearchDTO;
 import com.example.demo.dto.QuestionCountDTO;
 import com.example.demo.pojo.Account;
-import com.example.demo.pojo.PaperPO;
-import com.example.demo.pojo.Question;
-import com.example.demo.service.IPaperMgrService;
+import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.Result;
 import com.example.demo.util.ResultUtil;
-import com.example.demo.vo.PaperDetailVO;
+import com.example.demo.vo.TestPaperDetailVO;
 import com.example.demo.vo.QuestionDetailVO;
 import com.github.pagehelper.PageHelper;
 
@@ -31,33 +30,31 @@ import java.util.Map;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping(value="/paper/mgr")
-public class PaperMgrController extends BaseController {
+@RequestMapping(value="/testPaper/mgr")
+public class TestPaperMgrController extends BaseController {
 
     @Autowired
-    private IPaperMgrService paperMgrService;
+    private ITestPaperMgrService testPaperMgrService;
 
     @ResponseBody
     @RequestMapping(value="/addOrUpdatePaper", method=RequestMethod.POST)
-    public Result addOrUpdatePaper(@RequestBody @Valid PaperDTO dto, BindingResult result) throws MyException {
+    public Result addOrUpdatePaper(@RequestBody TestPaperDTO dto) throws MyException {
+//        if(result.hasErrors()){
+//            throw new MyException(-1, "表单未填写完整");
+//        }
         Map<String, Object> param = new HashMap<>();
         param.put("id", dto.getId());
         param.put("title", dto.getTitle());
         param.put("duration", dto.getDuration());
         param.put("startTime", dto.getStartTime());
+        param.put("totalMark", dto.getTotalMark());
         param.put("endTime", dto.getEndTime());
-//        param.put("approach", dto.getApproach());
-//        param.put("singleChoiceCount", dto.getSingleChoiceCount());
-//        param.put("multiChoiceCount", dto.getMultiChoiceCount());
-//        param.put("multiEntryCount", dto.getMultiEntryCount());
-//        param.put("judgeCount", dto.getJudgeCount());
-//        param.put("completionCount", dto.getCompletionCount());
         param.put("questionList", dto.getQuestionList());
         param.put("subjectId", dto.getSubjectId());
         Account user = getUser();
         param.put("creator", user.getName());
         param.put("createTime", new Date());
-        paperMgrService.addOrUpdatePaper(param);
+        testPaperMgrService.addOrUpdatePaper(param);
         return ResultUtil.success();
     }
     
@@ -70,22 +67,23 @@ public class PaperMgrController extends BaseController {
         param.put("multiEntryCount", dto.getMultiEntryCount());
         param.put("judgeCount", dto.getJudgeCount());
         param.put("completionCount", dto.getCompletionCount());
-        param.put("subjectId", dto.getSubjectId());
-        List<QuestionDetailVO> list = paperMgrService.autoCreateQuestionList(param);
+        param.put("subjectId", 1);
+        List<QuestionDetailVO> list = testPaperMgrService.autoCreateQuestionList(param);
     	return ResultUtil.addResult(list);
     }
     
     @ResponseBody
     @RequestMapping(value="/queryPaperList", method=RequestMethod.POST)
-    public Result queryPaperList(@RequestBody PaperSearchDTO dto){
+    public Result queryPaperList(@RequestBody TestPaperSearchDTO dto){
     	Map<String, Object> param = new HashMap<>();
         param.put("id", dto.getId());
         param.put("title", dto.getTitle());
         param.put("createTime", dto.getCreateTime());
         param.put("creator", dto.getCreator());
         param.put("status", dto.getStatus());
-        PageHelper.startPage(dto.getPage(), 30);
-    	List<PaperPO> list = paperMgrService.queryPaperList(param);
+        param.put("subjectId", dto.getSubjectId());
+//        PageHelper.startPage(dto.getPage(), 30);
+    	List<TestPaperPO> list = testPaperMgrService.queryPaperList(param);
     	return ResultUtil.addResult(list);
     }
     
@@ -93,7 +91,7 @@ public class PaperMgrController extends BaseController {
     @RequestMapping(value="/queryPaperDetail", method=RequestMethod.POST)
     public Result queryPaperDetail(@RequestBody String id){
     	Integer paperId = (Integer) JSON.parseObject(id).get("id");
-    	PaperDetailVO vo = paperMgrService.queryPaperDetail(paperId);
+    	TestPaperDetailVO vo = testPaperMgrService.queryPaperDetail(paperId);
     	return ResultUtil.addResult(vo);
     }
 

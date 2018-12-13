@@ -1,7 +1,7 @@
 package com.example.demo.service.imp;
 
 import com.example.demo.mapper.*;
-import com.example.demo.pojo.Option;
+import com.example.demo.pojo.OptionPO;
 import com.example.demo.pojo.SubjectPO;
 import com.example.demo.service.IQuestionMgrService;
 import com.example.demo.util.QuestionTypeUtil;
@@ -74,7 +74,7 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
         list = questionMapper.queryQuestion(param);
         if(type == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || type == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
             for(QuestionDetailVO vo : list){
-                List<Option> optionList = optionMapper.queryOptionListByQuestionId(vo);
+                List<OptionPO> optionList = optionMapper.queryOptionListByQuestionId(vo);
                 vo.setOptionList(optionList);
             }
         }
@@ -152,10 +152,5 @@ public class QuestionMgrServiceImp implements IQuestionMgrService {
         	param.put("answer", param.get("singleAnswer"));
         }
     }
- 
-
-
-
-
 
 }

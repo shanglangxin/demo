@@ -15,7 +15,7 @@
         DELETE FROM `option` WHERE question_id=#{id} AND question_type=#{type}
     </delete>
 
-    <select id="queryOptionListByQuestionId" resultType="com.example.demo.pojo.Option">
+    <select id="queryOptionListByQuestionId" resultType="com.example.demo.pojo.OptionPO">
         SELECT id, name, question_id questionId, question_type questionType FROM `option` WHERE question_id=#{id} AND question_type=#{type}
     </select>
 

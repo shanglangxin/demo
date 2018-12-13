@@ -1,6 +1,6 @@
 package com.example.demo.vo;
 
-import com.example.demo.pojo.Option;
+import com.example.demo.pojo.OptionPO;
 
 import java.sql.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ public class QuestionDetailVO {
     private String creator;
     private Date createTime;
     private String showTitle;
-    private List<Option> optionList;
+    private List<OptionPO> optionList;
 
     public Integer getId() {
         return id;
@@ -81,11 +81,11 @@ public class QuestionDetailVO {
         this.showTitle = showTitle;
     }
 
-    public List<Option> getOptionList() {
+    public List<OptionPO> getOptionList() {
         return optionList;
     }
 
-    public void setOptionList(List<Option> optionList) {
+    public void setOptionList(List<OptionPO> optionList) {
         this.optionList = optionList;
     }
 }

@@ -2,14 +2,14 @@ package com.example.demo.vo;
 
 import java.util.List;
 
-import com.example.demo.pojo.Option;
+import com.example.demo.pojo.OptionPO;
 
 public class QuestionSimpleVO {
 	
 	private Integer id;
 	private String title;
 	private String showTitle;
-	private List<Option> optionList;
+	private List<OptionPO> optionList;
 	public Integer getId() {
 		return id;
 	}
@@ -28,10 +28,10 @@ public class QuestionSimpleVO {
 	public void setShowTitle(String showTitle) {
 		this.showTitle = showTitle;
 	}
-	public List<Option> getOptionList() {
+	public List<OptionPO> getOptionList() {
 		return optionList;
 	}
-	public void setOptionList(List<Option> optionList) {
+	public void setOptionList(List<OptionPO> optionList) {
 		this.optionList = optionList;
 	}
 	

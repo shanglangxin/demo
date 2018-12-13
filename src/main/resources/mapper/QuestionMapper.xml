@@ -25,7 +25,7 @@
     </select>
 
     <update id="updateQuestion" parameterType="map">
-        UPDATE ${table} SET title=#{title}, show_title=#{showTitle}, answer=#{answer}, subject_id=#{subjectid} WHERE id=#{id}
+        UPDATE ${table} SET title=#{title}, show_title=#{showTitle}, answer=#{answer}, subject_id=#{subjectId} WHERE id=#{id}
     </update>
 
     <delete id="deleteQuestion" parameterType="map">

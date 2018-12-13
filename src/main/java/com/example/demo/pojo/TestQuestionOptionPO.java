@@ -1,13 +1,11 @@
 package com.example.demo.pojo;
 
-public class Option {
+public class TestQuestionOptionPO {
 
     private Integer id;
     private String name;
     private Integer questionId;
     private Integer questionType;
-
-
 
     public Integer getId() {
         return id;

@@ -1,8 +1,11 @@
-package com.example.demo.pojo;
+package com.example.demo.vo;
 
 import java.util.Date;
+import java.util.List;
 
-public class PaperPO {
+import com.example.demo.dto.QuestionDTO;
+
+public class TestPaperDetailVO {
 	
 	private Integer id;
 	private String title;
@@ -12,6 +15,7 @@ public class PaperPO {
 	private Date createTime;
 	private Integer status;
 	private Integer subjectId;
+    private List<TestPaperQuestionDetailVO> questionList;
 	public Integer getId() {
 		return id;
 	}
@@ -60,7 +64,13 @@ public class PaperPO {
 	public void setSubjectId(Integer subjectId) {
 		this.subjectId = subjectId;
 	}
-	
-	
+	public List<TestPaperQuestionDetailVO> getQuestionList() {
+		return questionList;
+	}
+	public void setQuestionList(List<TestPaperQuestionDetailVO> questionList) {
+		this.questionList = questionList;
+	}
+    
+    
 
 }

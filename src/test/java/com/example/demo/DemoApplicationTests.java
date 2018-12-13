@@ -2,9 +2,12 @@ package com.example.demo;
 
 import com.example.demo.controller.SpringController;
 import com.example.demo.dto.OptionDTO;
-import com.example.demo.service.IPaperMgrService;
+import com.example.demo.dto.TestPaperQuestionDTO;
+import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.service.IQuestionMgrService;
 import com.example.demo.util.MyException;
+import com.example.demo.vo.QuestionDetailVO;
+import com.example.demo.vo.TestPaperDetailVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,15 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,7 +33,8 @@ public class DemoApplicationTests {
 	@Autowired
 	private IQuestionMgrService questionMgrService;
 	@Autowired
-	private IPaperMgrService paperMgrService;
+	private ITestPaperMgrService testPaperMgrService;
+
 
 	@Before
 	public void setUp(){
@@ -77,14 +76,74 @@ public class DemoApplicationTests {
 	@Test
 	public void testAddOrUpdate() throws MyException {
 		Map<String, Object> param = new HashMap<>();
-		param.put("approach", 0);
+		param.put("id", 14);
+		param.put("title", "wqeqwe");
+		param.put("duration", 30);
+		param.put("startTime", new Date());
+		param.put("totalMark", 100);
+		param.put("endTime", new Date());
+		param.put("subjectId", 1);
+		param.put("creator", "21321");
+		param.put("createTime", new Date());
+
+		List<TestPaperQuestionDTO> list = new ArrayList<>();
+		List<OptionDTO> optionLIst = new ArrayList<>();
+		OptionDTO optionDTO = new OptionDTO();
+		optionDTO.setName("fdsfsfds");
+		optionDTO.setQuestionId(2);
+		optionLIst.add(optionDTO);
+		optionLIst.add(optionDTO);
+
+		TestPaperQuestionDTO dto1 = new TestPaperQuestionDTO();
+		dto1.setTitle("21321321");
+		dto1.setShowTitle("sdsadsadsa");
+		dto1.setType(2);
+		dto1.setSingleAnswer("2321321");
+		dto1.setSubjectId(1);
+		dto1.setSort(1);
+		dto1.setOptionList(optionLIst);
+
+		TestPaperQuestionDTO dto2 = new TestPaperQuestionDTO();
+		dto2.setTitle("213213223323221");
+		dto2.setShowTitle("sdsad323sadsa");
+		dto2.setType(1);
+		dto2.setSingleAnswer("2321321");
+		dto2.setSubjectId(1);
+		dto2.setSort(1);
+
+		TestPaperQuestionDTO dto3 = new TestPaperQuestionDTO();
+		dto3.setTitle("213213223323221");
+		dto3.setShowTitle("sdsad323sadsa");
+		dto3.setType(1);
+		dto3.setSingleAnswer("2321321");
+		dto3.setSubjectId(1);
+		dto3.setSort(1);
+		list.add(dto1);
+		list.add(dto2);
+		list.add(dto3);
+
+		param.put("questionList", list);
+		testPaperMgrService.addOrUpdatePaper(param);
+	}
+
+	@Test
+	public void testAutoCreate() throws MyException {
+		Map<String, Object> param = new HashMap<>();
 		param.put("singleChoiceCount", 1);
 		param.put("multiChoiceCount", 1);
-		param.put("multiEntryCount", 1);
+		param.put("multiEntryCount",1);
 		param.put("judgeCount", 1);
 		param.put("completionCount", 1);
 		param.put("subjectId", 1);
-		paperMgrService.addOrUpdatePaper(param);
+		List<QuestionDetailVO> list = testPaperMgrService.autoCreateQuestionList(param);
+		Integer in = 1;
+	}
+
+	@Test
+	public void getPaperDetail(){
+		Integer id = 14;
+		TestPaperDetailVO vo = testPaperMgrService.queryPaperDetail(14);
+		Integer i = 1;
 	}
 
 }

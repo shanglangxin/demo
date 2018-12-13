@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestQuestionOptionMapper">
+
+    <insert id="addTestOption" >
+        INSERT INTO test_question_option(name,test_question_id, test_question_type) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{questionId}, #{type})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOptionByQuestionId" parameterType="java.lang.Integer">
+        DELETE FROM `test_question_option` WHERE test_question_id=#{id}
+    </delete>
+
+    <select id="queryTestOptionByTestQuestionId" resultType="com.example.demo.pojo.TestQuestionOptionPO">
+        SELECT id, name, test_question_id questionId, test_question_type questionType FROM `test_question_option` WHERE test_question_id=#{id}
+    </select>
+
+    <delete id="deleteOptionByTestQuestionIds" parameterType="java.lang.Integer">
+        DELETE FROM `test_question_option` WHERE test_question_id IN
+        <foreach collection="list" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

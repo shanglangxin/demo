@@ -1,63 +1,64 @@
 package com.example.demo.service.imp;
 
-import com.example.demo.mapper.OptionMapper;
-import com.example.demo.mapper.PaperMapper;
-import com.example.demo.mapper.PaperQuestionMapper;
-import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.pojo.Option;
-import com.example.demo.pojo.PaperPO;
-import com.example.demo.pojo.Question;
-import com.example.demo.service.IPaperMgrService;
+import com.example.demo.dto.TestPaperQuestionDTO;
+import com.example.demo.mapper.*;
+import com.example.demo.pojo.OptionPO;
+import com.example.demo.pojo.TestQuestionOptionPO;
+import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.util.MyException;
-import com.example.demo.vo.PaperDetailVO;
+import com.example.demo.util.QuestionTypeUtil;
+import com.example.demo.vo.TestPaperDetailVO;
 import com.example.demo.vo.QuestionDetailVO;
+import com.example.demo.vo.TestPaperQuestionDetailVO;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Service("paperMgrService")
-public class PaperMgrServiceImp implements IPaperMgrService {
+@Service("testPaperMgrService")
+public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
     private OptionMapper optionMapper;
     @Autowired
-    private PaperMapper paperMapper;
+    private TestPaperMapper testPaperMapper;
     @Autowired
-    private PaperQuestionMapper paperQuestionMapper;
+    private TestPaperQuestionMapper testPaperQuestionMapper;
+    @Autowired
+	private TestQuestionOptionMapper testQuestionOptionMapper;
     
     @Override
-	public List<PaperPO> queryPaperList(Map<String, Object> param) {
-		// TODO Auto-generated method stub
-    	List<PaperPO> list = paperMapper.queryPaperList(param);
+	public List<TestPaperPO> queryPaperList(Map<String, Object> param) {
+    	List<TestPaperPO> list = testPaperMapper.queryPaperList(param);
 		return list;
 	}
 
     @Override
     public void addOrUpdatePaper(Map<String, Object> param) throws MyException {
-//        paperMapper.addOrUpdatePaper(param);
-//        Integer approach = (Integer) param.get("approach");
-//        if(approach == 0){
-//            List<QuestionDetailVO> questionList = queryQuestionList(param);
-//        }
     	Integer status = this.handlePaperStatus((Date) param.get("startTime"), (Date) param.get("endTime"));
     	param.put("status", status);
     	Integer id = (Integer) param.get("id");
+		List<TestPaperQuestionDTO> list = (List<TestPaperQuestionDTO>) param.get("questionList");
+		this.handleQuestionAnswer(list);
     	if(id == null || id == 0){
-    		paperMapper.addPaper(param);
-    		paperQuestionMapper.addQuestions(param);
-    		
+			testPaperMapper.addPaper(param);
+			testPaperQuestionMapper.addTestPaperQuestions(list, ((Long)param.get("id")).intValue());
     	}else{
-    		paperQuestionMapper.deleteQuestionsByPaperId(id);
-    		paperMapper.update(param);
-    		paperQuestionMapper.addQuestions(param);
+			List<Integer> questionIdList = testPaperQuestionMapper.queryTestQuestionIdsByPaperId(id);
+			testQuestionOptionMapper.deleteOptionByTestQuestionIds(questionIdList);
+			testPaperQuestionMapper.deleteQuestionsByPaperId(id);
+			testPaperMapper.updateTestPaper(param);
+			testPaperQuestionMapper.addTestPaperQuestions(list, id);
     	}
-
+		for(TestPaperQuestionDTO dto : list){
+    		if(dto.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || dto.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+				testQuestionOptionMapper.addTestOption(dto.getId(), dto.getOptionList(), dto.getType());
+			}
+		}
     }
 
 	@Override
@@ -99,9 +100,22 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 	}
 	
 	@Override
-	public PaperDetailVO queryPaperDetail(Integer paperId) {
+	public TestPaperDetailVO queryPaperDetail(Integer paperId) {
 		// TODO Auto-generated method stub
-		PaperDetailVO paperDetailVO = paperMapper.queryPaperById(paperId);
+		TestPaperDetailVO paperDetailVO = testPaperMapper.queryTestPaperById(paperId);
+		List<TestPaperQuestionDetailVO> list = testPaperQuestionMapper.queryTestQuestionByPaperId(paperId);
+		for(TestPaperQuestionDetailVO vo : list){
+			if(vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION || vo.getType() == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
+				vo.setMultiAnswer(Arrays.asList(vo.getAnswer().split(",")));
+			}else{
+				vo.setSingleAnswer(vo.getAnswer());
+			}
+			if(vo.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+				List<TestQuestionOptionPO> optionList = testQuestionOptionMapper.queryTestOptionByTestQuestionId(vo.getId());
+				vo.setOptionList(optionList);
+			}
+		}
+		paperDetailVO.setQuestionList(list);
 		return paperDetailVO;
 	}
     
@@ -123,7 +137,7 @@ public class PaperMgrServiceImp implements IPaperMgrService {
         List<QuestionDetailVO> questionList = questionMapper.queryQuestionList(table,idList);
         if(table.equals("single_choice_question") || table.equals("multiple_choice_question")){
         	for(QuestionDetailVO vo : questionList){
-                List<Option> optionList = optionMapper.queryOptionListByQuestionId(vo);
+                List<OptionPO> optionList = optionMapper.queryOptionListByQuestionId(vo);
                 if(optionList == null){
                     throw new MyException(-1,"题目有错");
                 }
@@ -142,10 +156,12 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 	 */
     private List<Integer> queryQuestionIds(Integer totalCount, Integer questionCount, List<Integer> allQuestionIdList) {
         List<Integer> idList = new ArrayList<>();
-        for(int i=0; i<=questionCount; i++){
+        int i = 0;
+        while(i<questionCount){
             Integer id = (int)(Math.random()*totalCount + 1);
-            if (!idList.contains(id) && allQuestionIdList.contains(id)){
+            if (!idList.contains(id) && allQuestionIdList.contains(id) && id <= totalCount){
                 idList.add(id);
+                i++;
             }
         }
         return idList;
@@ -170,6 +186,23 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 		return status;
 	}
 
+	// 处理题目答案
+	private void handleQuestionAnswer(List<TestPaperQuestionDTO> list) throws MyException {
+    	for(TestPaperQuestionDTO dto : list){
+    		Integer type = dto.getType();
+    		if(type == null || type == 0){
+    			throw new MyException(-1,"题目类型不能为空");
+			}
+			if(type == QuestionTypeUtil.COMPLETION_QUESTION || type == QuestionTypeUtil.JUDGE_QUESTION || type == QuestionTypeUtil.SINGLE_CHOICE_QUESTION){
+				String answer = dto.getSingleAnswer();
+				dto.setAnswer(answer);
+			}else if(type == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION || type == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
+				List<String> multiple = dto.getMultiAnswer();
+				String answer = StringUtils.join(multiple, ',');
+				dto.setAnswer(answer);
+			}
+		}
+	}
 
 //  private List<QuestionDetailVO> queryQuestionList(Map<String,Object> param) throws MyException {
 //  List<QuestionDetailVO> list = new ArrayList<>();
@@ -190,7 +223,7 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 //      List<Integer> idList = queryQuestionIds(totalCount, singleChoiceCount, allQuestionIdList);
 //      List<QuestionDetailVO> questionList = questionMapper.queryQuestionList(table,idList);
 //      for(QuestionDetailVO vo : questionList){
-//          List<Option> optionList = optionMapper.queryOptionListByQuestionId(vo);
+//          List<OptionPO> optionList = optionMapper.queryOptionListByQuestionId(vo);
 //          if(optionList == null){
 //              throw new MyException(-1,"题目有错");
 //          }
@@ -205,7 +238,7 @@ public class PaperMgrServiceImp implements IPaperMgrService {
 //      List<Integer> idList = queryQuestionIds(totalCount, multiChoiceCount, allQuestionIdList);
 //      List<QuestionDetailVO> questionList = questionMapper.queryQuestionList(table,idList);
 //      for(QuestionDetailVO vo : questionList){
-//          List<Option> optionList = optionMapper.queryOptionListByQuestionId(vo);
+//          List<OptionPO> optionList = optionMapper.queryOptionListByQuestionId(vo);
 //          if(optionList == null){
 //              throw new MyException(-1,"题目有错");
 //          }

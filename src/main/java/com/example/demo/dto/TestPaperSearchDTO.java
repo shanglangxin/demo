@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 import java.util.Date;
 
-public class PaperSearchDTO {
+public class TestPaperSearchDTO {
 
 	private Integer id;
 	private String title;

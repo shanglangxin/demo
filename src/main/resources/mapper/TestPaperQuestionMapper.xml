@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestPaperQuestionMapper">
+
+    <insert id="addTestPaperQuestions" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO test_paper_question(title, showTitle, answer, type, test_paper_id, sort) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.title}, #{item.showTitle}, #{item.answer}, #{item.type}, #{paperId}, #{item.sort})
+        </foreach>
+    </insert>
+
+    <delete id="deleteQuestionsByPaperId" parameterType="java.lang.Integer">
+        DELETE FROM test_paper_question WHERE test_paper_id = #{id}
+    </delete>
+
+    <select id="queryTestQuestionByPaperId" resultType="com.example.demo.vo.TestPaperQuestionDetailVO">
+        SELECT * FROM test_paper_question WHERE test_paper_id = #{id};
+    </select>
+
+    <select id="queryTestQuestionIdsByPaperId" resultType="java.lang.Integer">
+        SELECT id FROM test_paper_question WHERE test_paper_id = #{id};
+    </select>
+
+</mapper>
