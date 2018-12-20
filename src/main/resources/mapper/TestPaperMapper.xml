@@ -39,4 +39,8 @@
         SELECT * FROM test_paper WHERE id = #{paperId}
     </select>
 
+    <select id="queryStudentTestPaperById" resultType="com.example.demo.vo.StudentTestPaperVO">
+        SELECT id, title, duration duration, subject_id FROM test_paper WHERE id = #{paperId}
+    </select>
+
 </mapper>

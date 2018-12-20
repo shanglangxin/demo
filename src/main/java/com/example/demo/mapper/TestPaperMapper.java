@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.vo.StudentTestPaperVO;
 import com.example.demo.vo.TestPaperDetailVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,6 @@ public interface TestPaperMapper {
     List<TestPaperPO> queryPaperList(Map<String,Object> param);
 
     TestPaperDetailVO queryTestPaperById(Integer paperId);
+
+    StudentTestPaperVO queryStudentTestPaperById(Integer paperId);
 }

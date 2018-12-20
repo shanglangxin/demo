@@ -3,10 +3,12 @@ package com.example.demo;
 import com.example.demo.controller.SpringController;
 import com.example.demo.dto.OptionDTO;
 import com.example.demo.dto.TestPaperQuestionDTO;
+import com.example.demo.service.IStudentTestService;
 import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.service.IQuestionMgrService;
 import com.example.demo.util.MyException;
 import com.example.demo.vo.QuestionDetailVO;
+import com.example.demo.vo.StudentTestPaperVO;
 import com.example.demo.vo.TestPaperDetailVO;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,9 @@ public class DemoApplicationTests {
 	private IQuestionMgrService questionMgrService;
 	@Autowired
 	private ITestPaperMgrService testPaperMgrService;
+	@Autowired
+	private IStudentTestService studentTestService;
+
 
 
 	@Before
@@ -140,9 +145,9 @@ public class DemoApplicationTests {
 	}
 
 	@Test
-	public void getPaperDetail(){
-		Integer id = 14;
-		TestPaperDetailVO vo = testPaperMgrService.queryPaperDetail(14);
+	public void getPaperDetail() throws MyException {
+		Integer id = 1;
+		StudentTestPaperVO vo = studentTestService.queryTestPaper(id);
 		Integer i = 1;
 	}
 

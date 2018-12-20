@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dto.TestPaperDTO;
 import com.example.demo.dto.TestPaperSearchDTO;
 import com.example.demo.dto.QuestionCountDTO;
@@ -89,8 +90,9 @@ public class TestPaperMgrController extends BaseController {
     
     @ResponseBody
     @RequestMapping(value="/queryPaperDetail", method=RequestMethod.POST)
-    public Result queryPaperDetail(@RequestBody String id){
-    	Integer paperId = (Integer) JSON.parseObject(id).get("id");
+    public Result queryPaperDetail(@RequestBody String param){
+        JSONObject jsonObject = JSON.parseObject(param);
+    	Integer paperId = (Integer) jsonObject.get("paperId");
     	TestPaperDetailVO vo = testPaperMgrService.queryPaperDetail(paperId);
     	return ResultUtil.addResult(vo);
     }
