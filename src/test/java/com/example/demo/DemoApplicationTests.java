@@ -4,12 +4,16 @@ import com.example.demo.controller.SpringController;
 import com.example.demo.dto.OptionDTO;
 import com.example.demo.dto.TestPaperQuestionDTO;
 import com.example.demo.service.IStudentTestService;
+import com.example.demo.service.ITeacherManagerService;
 import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.service.IQuestionMgrService;
+import com.example.demo.service.IStudentManagerService;
 import com.example.demo.util.MyException;
 import com.example.demo.vo.QuestionDetailVO;
 import com.example.demo.vo.StudentTestPaperVO;
 import com.example.demo.vo.TestPaperDetailVO;
+import com.github.pagehelper.PageHelper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +42,10 @@ public class DemoApplicationTests {
 	private ITestPaperMgrService testPaperMgrService;
 	@Autowired
 	private IStudentTestService studentTestService;
+	@Autowired
+	private IStudentManagerService studentManagerService;
+	@Autowired
+	private ITeacherManagerService teacherManagerService;
 
 
 
@@ -149,6 +157,34 @@ public class DemoApplicationTests {
 		Integer id = 1;
 		StudentTestPaperVO vo = studentTestService.queryTestPaper(id);
 		Integer i = 1;
+	}
+	
+	@Test
+	public void testGetStudent(){
+		Map<String, Object> param = new HashMap<>();
+		param.put("staffId", null);
+		param.put("classId", null);
+		param.put("departmentId", null);
+		param.put("name", "老师");
+		PageHelper.startPage(1, 30);
+		teacherManagerService.queryTeacherList(param);
+	}
+	
+	@Test
+	public void testAddStudent() throws MyException{
+		Map<String, Object> param = new HashMap<>();
+		param.put("staffId", 151548301);
+		param.put("departmentId", 3);
+		param.put("name", "老师31");
+		param.put("username", "151548301");
+		param.put("id", 3);
+		teacherManagerService.addOrUpdateTeacherInfo(param);
+	}
+	
+	@Test
+	public void testDeleteStudent(){
+		List<Integer> list = Arrays.asList(new Integer[]{1,2});
+		teacherManagerService.deleteTeacherInfo(list);
 	}
 
 }

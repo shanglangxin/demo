@@ -15,5 +15,17 @@
     <update id="updatePersonalInfo" parameterType="map">
         UPDATE account SET name=#{name}, staff_id=#{staffId} WHERE username=#{username}
     </update>
+    
+    <insert id="addTestUser" parameterType="map">
+        INSERT INTO account(username, password, type, name, staff_id) VALUES(#{username}, #{username}, #{type}, #{name}, #{staffId})
+    </insert>
+    
+    <update id="updateTestUser" parameterType="map">
+        UPDATE account SET name=#{name}, staff_id=#{staffId}, username=#{staffId} WHERE id = #{accountId}
+    </update>
+    
+    <select id="queryAccountByStaffId" resultType="com.example.demo.pojo.Account">
+    	SELECT * FROM account WHERE staff_id = #{staffId}
+    </select>
 
 </mapper>

@@ -28,7 +28,7 @@ public class PersonalInfoServiceImp implements IPersonalInfoService {
         if(po == null){
             throw new MyException(-1,"没有这个班级编号");
         }
-        StudentPO student = studentMapper.queryStudentById(param.get("username"));
+        StudentPO student = studentMapper.queryStudentByUsername((String)param.get("username"));
         if(student != null){
             throw new MyException(-1,"该账号信息已完善");
         }
