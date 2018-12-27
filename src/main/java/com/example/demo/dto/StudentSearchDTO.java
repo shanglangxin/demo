@@ -2,9 +2,9 @@ package com.example.demo.dto;
 
 public class StudentSearchDTO {
 	
-	private Integer staffId;
+	private String staffId;
 	private String name;
-	private Integer classId;
+	private String classId;
 	private Integer departmentId;
 	private Integer page;
 	
@@ -15,31 +15,34 @@ public class StudentSearchDTO {
 	public void setPage(Integer page) {
 		this.page = page;
 	}
-	public Integer getStaffId() {
-		return staffId;
-	}
-	public void setStaffId(Integer staffId) {
-		this.staffId = staffId;
-	}
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getClassId() {
-		return classId;
-	}
-	public void setClassId(Integer classId) {
-		this.classId = classId;
-	}
+
 	public Integer getDepartmentId() {
 		return departmentId;
 	}
 	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
 	}
-	
-	
 
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}
+
+	public String getClassId() {
+		return classId;
+	}
+
+	public void setClassId(String classId) {
+		this.classId = classId;
+	}
 }

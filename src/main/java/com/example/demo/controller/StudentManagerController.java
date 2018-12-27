@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.pojo.ClazzPO;
+import com.example.demo.vo.StudentVO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +42,8 @@ public class StudentManagerController {
 		param.put("departmentId", dto.getDepartmentId());
 		param.put("name", dto.getName());
 		PageHelper.startPage(dto.getPage(), 30);
-		List<StudentPO> list = studentManagerService.queryStudentList(param);
-		return ResultUtil.addResult(list);
+		List<StudentVO> list = studentManagerService.queryStudentList(param);
+		return ResultUtil.addResult(new PageInfo(list));
 	}
 	
 	@ResponseBody
@@ -56,13 +59,24 @@ public class StudentManagerController {
 		studentManagerService.addOrUpdateStudent(param);
 		return ResultUtil.success();
 	}
-	
+
+	@ResponseBody
+	@PostMapping(value="/deleteStudent")
 	public Result deleteStudent(@RequestBody String param){
 		JSONObject jsonObject = JSON.parseObject(param);
-		JSONArray idArray = (JSONArray)jsonObject.get("ids");
-		List<Integer> ids = JSONArray.parseArray(idArray.toString(), Integer.class);
+		JSONArray idArray = (JSONArray)jsonObject.get("staffIds");
+		List<String> ids = JSONArray.parseArray(idArray.toString(), String.class);
 		studentManagerService.deleteStudent(ids);
 		return ResultUtil.success();
+	}
+
+	@ResponseBody
+	@PostMapping(value="/queryDepartmentClass")
+	public Result queryDepartmentClass(@RequestBody String param){
+		JSONObject jsonObject = JSON.parseObject(param);
+		Integer departmentId = (Integer) jsonObject.get("departmentId");
+		List<ClazzPO> list = studentManagerService.queryDepartmentClass(departmentId);
+		return ResultUtil.addResult(list);
 	}
 
 }

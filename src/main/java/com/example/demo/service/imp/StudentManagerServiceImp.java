@@ -3,12 +3,15 @@ package com.example.demo.service.imp;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.mapper.ClassMapper;
+import com.example.demo.pojo.ClazzPO;
+import com.example.demo.vo.StudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.mapper.AccountMapper;
 import com.example.demo.mapper.StudentMapper;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.pojo.StudentPO;
 import com.example.demo.service.IStudentManagerService;
 import com.example.demo.util.AssertUtil;
@@ -21,20 +24,20 @@ public class StudentManagerServiceImp implements IStudentManagerService {
 	private StudentMapper studentMapper;
 	@Autowired
 	private AccountMapper accountMapper;
+	@Autowired
+	private ClassMapper classMapper;
 
 	@Override
-	public List<StudentPO> queryStudentList(Map<String, Object> param) {
-		// TODO Auto-generated method stub
-		List<StudentPO> list = studentMapper.queryStudentList(param);
+	public List<StudentVO> queryStudentList(Map<String, Object> param) {
+		List<StudentVO> list = studentMapper.queryStudentList(param);
 		return list;
 	}
 
 
 	@Override
 	public void addOrUpdateStudent(Map<String, Object> param) throws MyException {
-		// TODO Auto-generated method stub
 		Integer id = (Integer)param.get("id");
-		StudentPO student = studentMapper.queryStudentById(id);
+		StudentPO student = studentMapper.queryStudentByStaffId((String) param.get("staffId"));
 		if(!AssertUtil.isEmpty(student) && !student.getId().equals(id)){
 			throw new MyException(-1, "该学生信息已存在");
 		}
@@ -43,15 +46,22 @@ public class StudentManagerServiceImp implements IStudentManagerService {
 			param.put("type", 3);
 			accountMapper.addTestUser(param);
 		}else{
-			Account account = accountMapper.queryAccountByStaffId(student.getStaffId());
+			AccountPO account = accountMapper.queryAccountByStaffId(student.getStaffId());
 			studentMapper.updateStudentInfo(param);
 			param.put("accountId", account.getId());
 			accountMapper.updateTestUser(param);
 		}
 	}
 
-	public void deleteStudent(List<Integer> ids){
+	public void deleteStudent(List<String> ids){
 		studentMapper.deleteStudent(ids);
+		accountMapper.deleteAccountInfo(ids);
 	}
-	
+
+	@Override
+	public List<ClazzPO> queryDepartmentClass(Integer departmentId) {
+		List<ClazzPO> list = classMapper.queryClassByDepartmentId(departmentId);
+		return list;
+	}
+
 }

@@ -3,9 +3,9 @@ package com.example.demo.pojo;
 public class StudentPO {
 
     private Integer id;
-    private Integer staffId;
+    private String staffId;
     private String name;
-    private Integer classId;
+    private String classId;
     private String username;
 
     public Integer getId() {
@@ -16,11 +16,11 @@ public class StudentPO {
         this.id = id;
     }
 
-    public Integer getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -32,11 +32,11 @@ public class StudentPO {
         this.name = name;
     }
 
-    public Integer getClassId() {
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(Integer classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 

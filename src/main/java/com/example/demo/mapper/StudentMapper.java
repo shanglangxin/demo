@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.pojo.StudentPO;
+import com.example.demo.vo.StudentVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public interface StudentMapper {
 
 	void updateStudentInfo(Map<String, Object> param);
 
-	StudentPO queryStudentById(Integer id);
+	StudentPO queryStudentByStaffId(String id);
 
-	List<StudentPO> queryStudentList(Map<String, Object> param);
+	List<StudentVO> queryStudentList(Map<String, Object> param);
 
-	void deleteStudent(List<Integer> ids);
+	void deleteStudent(List<String> ids);
 }

@@ -47,7 +47,12 @@
     </select>
 
     <select id="queryQuestionIdList" resultType="java.lang.Integer">
-        SELECT id FROM ${table} WHERE subject_id=#{subjectId}
+        SELECT id FROM ${table}
+        <where>
+            <if test="subjectId != null">
+                subject_id=#{subjectId}
+            </if>
+        </where>
     </select>
 
 </mapper>

@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AccountDTO;
-import com.example.demo.mapper.AccountMapper;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.service.ILoginService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.Result;
 import com.example.demo.util.ResultUtil;
-import com.example.demo.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RequestMapping(value="/login")
 @Controller
@@ -42,7 +39,7 @@ public class LoginController extends BaseController {
     @ResponseBody
     @PostMapping(value="/getSession")
     public Result getSession() throws MyException {
-        Account account = getUser();
+        AccountPO account = getUser();
         return ResultUtil.addResult(account);
     }
 

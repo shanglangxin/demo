@@ -8,4 +8,12 @@
         SELECT * FROM class WHERE class_id=#{classId}
     </select>
 
+    <select id="queryClassByDepartmentId" resultType="com.example.demo.pojo.ClazzPO">
+        SELECT * FROM class WHERE department_id=#{departmentId}
+    </select>
+
+    <select id="queryDepartmentList" resultType="com.example.demo.pojo.DepartmentPO">
+        SELECT * FROM department
+    </select>
+
 </mapper>

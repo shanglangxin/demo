@@ -5,8 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.SearchQuesiotnDTO;
-import com.example.demo.pojo.Account;
-import com.example.demo.pojo.Question;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.pojo.SubjectPO;
 import com.example.demo.service.IQuestionMgrService;
 import com.example.demo.util.MyException;
@@ -33,7 +32,7 @@ public class QuestionMgrController extends BaseController {
     @ResponseBody
     @PostMapping(value = "/addOrUpdateQuestion")
     public Result addOrUpdateQuestion(@RequestBody QuestionDTO dto) throws MyException {
-        Account user = getUser();
+        AccountPO user = getUser();
         Map<String, Object> param = new HashMap<>();
         param.put("id",dto.getId());
         param.put("title", dto.getTitle());
@@ -52,7 +51,7 @@ public class QuestionMgrController extends BaseController {
     @ResponseBody
     @RequestMapping(value="/querySubjects", method=RequestMethod.GET)
     public Result querySubjects() throws MyException {
-        Account user = getUser();
+        AccountPO user = getUser();
         Map<String, Object> param = new HashMap<>();
         param.put("username", user.getUsername());
         param.put("type", user.getType());

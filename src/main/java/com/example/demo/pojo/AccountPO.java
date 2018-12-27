@@ -1,14 +1,13 @@
 package com.example.demo.pojo;
 
-public class Account {
+public class AccountPO {
 
     private Integer id;
     private String username;
     private String password;
-    private String pinyinName;
     private String name;
     private Integer type;
-    private Integer staffId;
+    private String staffId;
 
     public Integer getId() {
         return id;
@@ -34,14 +33,6 @@ public class Account {
         this.password = password;
     }
 
-    public String getPinyinName() {
-        return pinyinName;
-    }
-
-    public void setPinyinName(String pinyinName) {
-        this.pinyinName = pinyinName;
-    }
-
     public String getName() {
         return name;
     }
@@ -58,11 +49,11 @@ public class Account {
         this.type = type;
     }
 
-    public Integer getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 }

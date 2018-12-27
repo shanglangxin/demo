@@ -2,11 +2,9 @@ package com.example.demo.service.imp;
 
 import com.example.demo.dto.AccountDTO;
 import com.example.demo.mapper.AccountMapper;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.service.ILoginService;
 import com.example.demo.util.MyException;
-import com.example.demo.util.Result;
-import com.example.demo.util.ResultUtil;
 import com.example.demo.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +30,9 @@ public class LoginServiceImp implements ILoginService {
             throw new MyException(-1,"职位不对称");
         }
         if(vo.getPassword().equals(dto.getPassword())){
-            Account user = new Account();
+            AccountPO user = new AccountPO();
             user.setUsername(vo.getUsername());
             user.setStaffId(vo.getStaffId());
-            user.setPinyinName(vo.getPinyinName());
             user.setName(vo.getName());
             user.setType(vo.getType());
             HttpSession session = request.getSession();

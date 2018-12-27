@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.util.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,9 +12,9 @@ public class BaseController {
     @Autowired
     private HttpServletRequest request;
 
-    public Account getUser() throws MyException {
+    public AccountPO getUser() throws MyException {
         HttpSession session = request.getSession();
-        Account user = (Account) session.getAttribute("user");
+        AccountPO user = (AccountPO) session.getAttribute("user");
         if(user == null){
             throw new MyException(-1,"无法获取用户信息");
         }

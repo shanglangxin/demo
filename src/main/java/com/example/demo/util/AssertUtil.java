@@ -1,7 +1,5 @@
 package com.example.demo.util;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.util.Collection;
 
 public class AssertUtil {

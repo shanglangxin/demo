@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dto.TestPaperDTO;
 import com.example.demo.dto.TestPaperSearchDTO;
 import com.example.demo.dto.QuestionCountDTO;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.pojo.TestPaperPO;
 import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.util.MyException;
@@ -13,11 +13,9 @@ import com.example.demo.util.Result;
 import com.example.demo.util.ResultUtil;
 import com.example.demo.vo.TestPaperDetailVO;
 import com.example.demo.vo.QuestionDetailVO;
-import com.github.pagehelper.PageHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,8 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value="/testPaper/mgr")
@@ -52,7 +48,7 @@ public class TestPaperMgrController extends BaseController {
         param.put("endTime", dto.getEndTime());
         param.put("questionList", dto.getQuestionList());
         param.put("subjectId", dto.getSubjectId());
-        Account user = getUser();
+        AccountPO user = getUser();
         param.put("creator", user.getName());
         param.put("createTime", new Date());
         testPaperMgrService.addOrUpdatePaper(param);
@@ -68,7 +64,7 @@ public class TestPaperMgrController extends BaseController {
         param.put("multiEntryCount", dto.getMultiEntryCount());
         param.put("judgeCount", dto.getJudgeCount());
         param.put("completionCount", dto.getCompletionCount());
-        param.put("subjectId", 1);
+        param.put("subjectId", dto.getSubjectId());
         List<QuestionDetailVO> list = testPaperMgrService.autoCreateQuestionList(param);
     	return ResultUtil.addResult(list);
     }

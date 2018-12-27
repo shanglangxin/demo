@@ -17,15 +17,22 @@
     </update>
     
     <insert id="addTestUser" parameterType="map">
-        INSERT INTO account(username, password, type, name, staff_id) VALUES(#{username}, #{username}, #{type}, #{name}, #{staffId})
+        INSERT INTO account(username, password, type, name, staff_id) VALUES(#{staffId}, #{staffId}, #{type}, #{name}, #{staffId})
     </insert>
     
     <update id="updateTestUser" parameterType="map">
         UPDATE account SET name=#{name}, staff_id=#{staffId}, username=#{staffId} WHERE id = #{accountId}
     </update>
     
-    <select id="queryAccountByStaffId" resultType="com.example.demo.pojo.Account">
+    <select id="queryAccountByStaffId" resultType="com.example.demo.pojo.AccountPO">
     	SELECT * FROM account WHERE staff_id = #{staffId}
     </select>
+
+    <delete id="deleteAccountInfo" parameterType="list">
+        DELETE FROM account WHERE staff_id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

@@ -1,10 +1,11 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.AccountDTO;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.vo.AccountVO;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -21,5 +22,7 @@ public interface AccountMapper {
 
 	void updateTestUser(Map<String, Object> param);
 
-	Account queryAccountByStaffId(Integer staffId);
+	AccountPO queryAccountByStaffId(String staffId);
+
+    void deleteAccountInfo(List<String> ids);
 }

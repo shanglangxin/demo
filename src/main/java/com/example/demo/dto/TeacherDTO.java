@@ -1,10 +1,10 @@
-package com.example.demo.controller;
+package com.example.demo.dto;
 
 public class TeacherDTO {
 
 	private Integer id;
 	private String name;
-	private Integer staffId;
+	private String staffId;
 	private Integer departmentId;
 	public Integer getId() {
 		return id;
@@ -18,10 +18,10 @@ public class TeacherDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getStaffId() {
+	public String getStaffId() {
 		return staffId;
 	}
-	public void setStaffId(Integer staffId) {
+	public void setStaffId(String staffId) {
 		this.staffId = staffId;
 	}
 	public Integer getDepartmentId() {

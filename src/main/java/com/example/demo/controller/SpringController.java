@@ -1,14 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.Answer;
-import com.example.demo.dto.User;
-import org.apache.catalina.security.SecurityUtil;
-import org.springframework.stereotype.Controller;
+import com.example.demo.dto.AnswerDTO;
+import com.example.demo.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RestController(value="springController")
 @RequestMapping(value="/iController")
@@ -21,7 +18,7 @@ public class SpringController {
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
+    public String login(@RequestBody UserDTO user, HttpServletRequest request, HttpServletResponse response){
         if(user.getUsername().equals("123") && user.getPassword().equals("qwe")){
             return "OJBK";
         }
@@ -30,8 +27,8 @@ public class SpringController {
 
     @ResponseBody
     @RequestMapping(value = "/getAnswer", method = RequestMethod.POST)
-    public String getAnswer(@RequestBody Answer answer){
-        Answer aa = answer;
+    public String getAnswer(@RequestBody AnswerDTO answer){
+        AnswerDTO aa = answer;
         return "OK";
     }
 

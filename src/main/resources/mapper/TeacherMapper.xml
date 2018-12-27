@@ -7,7 +7,7 @@
 	<select id="queryTeacherList" resultType="com.example.demo.pojo.TeacherPO">
 		SELECT * FROM teacher
 		<where>
-			<if test="staffId != null">
+			<if test="staffId != null and staffId != ''">
 				staff_id = #{staffId}
 			</if>
 			<if test="name != null and name != ''">
@@ -19,8 +19,8 @@
 		</where>
 	</select>
 	
-	<select id="queryTeacherById" resultType="com.example.demo.pojo.TeacherPO">
-		SELECT * FROM teacher WHERE id = #{id}
+	<select id="queryTeacherByStaffId" resultType="com.example.demo.pojo.TeacherPO">
+		SELECT * FROM teacher WHERE staff_id = #{staffId}
 	</select>
 	
 	<insert id="addTeacherInfo" parameterType="map">
@@ -32,7 +32,7 @@
 	</update>
 	
 	<delete id="deleteTeacherInfo" parameterType="list">
-		DELETE FROM teacher WHERE id IN
+		DELETE FROM teacher WHERE staff_id IN
 		<foreach collection="list" item="id" open="(" close=")" separator=",">
 			#{id}
 		</foreach>

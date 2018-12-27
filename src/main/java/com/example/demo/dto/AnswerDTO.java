@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 import java.util.List;
 
-public class Answer {
+public class AnswerDTO {
 
     private Integer id;
 
@@ -10,13 +10,13 @@ public class Answer {
 
     private Integer type;
 
-    List<Answer> list;
+    List<AnswerDTO> list;
 
-    public List<Answer> getList() {
+    public List<AnswerDTO> getList() {
         return list;
     }
 
-    public void setList(List<Answer> list) {
+    public void setList(List<AnswerDTO> list) {
         this.list = list;
     }
 

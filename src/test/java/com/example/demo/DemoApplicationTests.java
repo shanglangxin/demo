@@ -183,8 +183,8 @@ public class DemoApplicationTests {
 	
 	@Test
 	public void testDeleteStudent(){
-		List<Integer> list = Arrays.asList(new Integer[]{1,2});
-		teacherManagerService.deleteTeacherInfo(list);
+//		List<Integer> list = Arrays.asList(new Integer[]{1,2});
+//		teacherManagerService.deleteTeacherInfo(list);
 	}
 
 }

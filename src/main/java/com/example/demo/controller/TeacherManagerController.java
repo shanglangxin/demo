@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dto.TeacherDTO;
+import com.example.demo.pojo.DepartmentPO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -38,7 +38,7 @@ public class TeacherManagerController {
 		param.put("departmentId", dto.getDepartmentId());
 		PageHelper.startPage(dto.getPage(), 30);
 		List<TeacherPO> list = teacherManagerService.queryTeacherList(param);
-		return ResultUtil.addResult(list);
+		return ResultUtil.addResult(new PageInfo(list));
 	}
 	
 	@ResponseBody
@@ -52,13 +52,22 @@ public class TeacherManagerController {
 		teacherManagerService.addOrUpdateTeacherInfo(param);
 		return ResultUtil.success();
 	}
-	
+
+	@ResponseBody
+	@PostMapping(value="/deleteTeacherInfo")
 	public Result deleteTeacherInfo(@RequestBody String param){
 		JSONObject jsonObject = JSON.parseObject(param);
 		JSONArray idArray = (JSONArray)jsonObject.get("ids");
-		List<Integer> ids = JSONArray.parseArray(idArray.toString(), Integer.class);
+		List<String> ids = JSONArray.parseArray(idArray.toString(), String.class);
 		teacherManagerService.deleteTeacherInfo(ids);
 		return ResultUtil.success();
 	}
-	
+
+	@ResponseBody
+	@GetMapping(value="/queryDepartmentList")
+	public Result queryDepartmentList(){
+		List<DepartmentPO> list = teacherManagerService.queryDepartmentList();
+		return ResultUtil.addResult(list);
+	}
+
 }

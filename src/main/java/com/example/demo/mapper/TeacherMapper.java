@@ -12,12 +12,12 @@ public interface TeacherMapper {
 
 	List<TeacherPO> queryTeacherList(Map<String, Object> param);
 
-	TeacherPO queryTeacherById(Integer id);
+	TeacherPO queryTeacherByStaffId(String id);
 
 	void addTeacherInfo(Map<String, Object> param);
 
 	void updateTeacherInfo(Map<String, Object> param);
 
-	void deleteTeacherInfo(List<Integer> ids);
+	void deleteTeacherInfo(List<String> ids);
 
 }

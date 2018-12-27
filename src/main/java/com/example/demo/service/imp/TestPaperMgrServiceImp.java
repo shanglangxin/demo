@@ -158,9 +158,13 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
         List<Integer> idList = new ArrayList<>();
         int i = 0;
         while(i<questionCount){
-            Integer id = (int)(Math.random()*totalCount + 1);
-            if (!idList.contains(id) && allQuestionIdList.contains(id) && id <= totalCount){
-                idList.add(id);
+            Integer id = (int)(Math.random()*totalCount) ;
+            if(id > totalCount){
+            	continue;
+			}
+            Integer questionId = allQuestionIdList.get(id);
+            if (!idList.contains(questionId)){
+                idList.add(questionId);
                 i++;
             }
         }

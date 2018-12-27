@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PersonalInfoDTO;
-import com.example.demo.pojo.Account;
+import com.example.demo.pojo.AccountPO;
 import com.example.demo.service.IPersonalInfoService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.Result;
@@ -30,7 +30,7 @@ public class PersonalInfoController extends BaseController {
         param.put("classId",dto.getClassId());
         param.put("staffId", dto.getStaffId());
         param.put("name", dto.getName());
-        Account user = getUser();
+        AccountPO user = getUser();
         param.put("username", user.getUsername());
         personalInfoService.completeInfo(param);
         return ResultUtil.success();

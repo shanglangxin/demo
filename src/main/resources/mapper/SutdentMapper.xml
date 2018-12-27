@@ -5,15 +5,15 @@
 <mapper namespace="com.example.demo.mapper.StudentMapper">
 
     <insert id="addStudent" parameterType="map">
-        INSERT INTO student(staff_id, name, class_id, username) VALUES(#{staffId}, #{name}, #{classId}, #{username})
+        INSERT INTO student(staff_id, name, class_id, username, department_id) VALUES(#{staffId}, #{name}, #{classId}, #{username}, #{departmentId})
     </insert>
 
     <select id="queryStudentByUsername" resultType="com.example.demo.pojo.StudentPO">
         SELECT * FROM student WHERE username = #{username}
     </select>
     
-    <select id="queryStudentById" resultType="com.example.demo.pojo.StudentPO">
-        SELECT * FROM student WHERE id = #{id}
+    <select id="queryStudentByStaffId" resultType="com.example.demo.pojo.StudentPO">
+        SELECT * FROM student WHERE staff_id = #{staffId}
     </select>
     
     <update id="updateStudentInfo" parameterType="map">
@@ -21,26 +21,30 @@
     	staff_id=#{staffId}, username=#{staffId} WHERE id=#{id}
     </update>
     
-    <select id="queryStudentList" parameterType="map" resultType="com.example.demo.pojo.StudentPO">
-    	SELECT * FROM student 
+    <select id="queryStudentList" parameterType="map" resultType="com.example.demo.vo.StudentVO">
+		SELECT s.*, d.name AS department_name, c.name AS class_name
+		  FROM student s
+		  LEFT JOIN department d ON s.department_id = d.id
+		  LEFT JOIN class c ON c.id = s.class_id
     	<where>
     		<if test="name != null and name != ''">
-    			name LIKE CONCAT("%",#{name},"%")
+    			s.name LIKE CONCAT("%",#{name},"%")
     		</if>
-    		<if test="staffId != null">
-    			AND staff_id = #{staffId}
+    		<if test="staffId != null and staffId != ''">
+    			AND s.staff_id = #{staffId}
     		</if>
-    		<if test="classId != null">
-    			AND class_id = #{calssId}
+    		<if test="classId != null and classId != ''">
+    			AND s.class_id = #{classId}
     		</if>
     		<if test="departmentId != null">
-    			AND department_id = #{departmentId}
+    			AND s.department_id = #{departmentId}
     		</if>
     	</where>
+		ORDER BY s.staff_id DESC
     </select>
     
     <delete id="deleteStudent" parameterType="list">
-    	DELETE FROM student WHERE id IN 
+    	DELETE FROM student WHERE staff_id IN
     	<foreach collection="list" item="id" open="(" close=")" separator=",">
     		#{id}
     	</foreach>

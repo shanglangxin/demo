@@ -4,10 +4,9 @@ public class AccountVO {
 
     private String username;
     private String password;
-    private String pinyinName;
     private String name;
     private Integer type;
-    private Integer staffId;
+    private String staffId;
     private Integer id;
 
     public String getUsername() {
@@ -34,14 +33,6 @@ public class AccountVO {
         this.type = type;
     }
 
-    public String getPinyinName() {
-        return pinyinName;
-    }
-
-    public void setPinyinName(String pinyinName) {
-        this.pinyinName = pinyinName;
-    }
-
     public String getName() {
         return name;
     }
@@ -50,11 +41,11 @@ public class AccountVO {
         this.name = name;
     }
 
-    public Integer getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 

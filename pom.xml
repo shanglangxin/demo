@@ -82,16 +82,17 @@
 
 		<!-- 导入google Maps -->
 		<dependency>
-			<groupId>com.google.collections</groupId>
-			<artifactId>google-collections</artifactId>
-			<version>1.0-rc2</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>20.0</version>
 		</dependency>
 
 		<!-- 导入lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.18</version>
+			<version>1.16.22</version>
+			<scope>provided</scope>
 		</dependency>
 
 

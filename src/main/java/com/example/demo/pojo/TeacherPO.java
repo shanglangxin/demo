@@ -3,7 +3,7 @@ package com.example.demo.pojo;
 public class TeacherPO {
 
 	private Integer id;
-	private Integer staffId;
+	private String staffId;
 	private String name;
 	private Integer departmentId;
 	private String username;
@@ -13,10 +13,10 @@ public class TeacherPO {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getStaffId() {
+	public String getStaffId() {
 		return staffId;
 	}
-	public void setStaffId(Integer staffId) {
+	public void setStaffId(String staffId) {
 		this.staffId = staffId;
 	}
 	public String getName() {
