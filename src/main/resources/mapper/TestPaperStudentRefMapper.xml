@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestPaperStudentRefMapper">
+
+    <select id="queryStudentMarkList" resultType="com.example.demo.vo.StudentMarkVO">
+        SELECT r.*, c.`name` AS class_name, s.`name` AS student_name, p.title FROM test_paper_student_ref r
+            LEFT JOIN class c ON r.class_id = c.class_id
+            LEFT JOIN student s ON s.staff_id = r.staff_id
+            LEFT JOIN test_paper p ON p.id = r.test_paper_id
+        <where>
+            <if test="classId != null and classId != ''">
+                r.class_id = #{classId}
+            </if>
+            <if test="departmentId != null">
+                AND c.department_id = #{departmentId}
+            </if>
+            <if test="title != null and title != ''">
+                AND p.title = #{title}
+            </if>
+        </where>
+        ORDER BY r.class_id DESC
+    </select>
+
+</mapper>
