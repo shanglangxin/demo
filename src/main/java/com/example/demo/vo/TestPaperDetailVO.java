@@ -11,14 +11,15 @@ public class TestPaperDetailVO {
 	private Integer id;
 	private String title;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date startTime;
+	private String startTime;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date endTime;
+	private String endTime;
 	private String creator;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date createTime;
+	private String createTime;
 	private Integer status;
 	private Integer subjectId;
+	private Integer duration;
     private List<TestPaperQuestionDetailVO> questionList;
 	public Integer getId() {
 		return id;
@@ -32,30 +33,47 @@ public class TestPaperDetailVO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getStartTime() {
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
+
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public Date getEndTime() {
+
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+
 	public String getCreator() {
 		return creator;
 	}
+
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
-	public Date getCreateTime() {
+
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Date createTime) {
+
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
+
 	public Integer getStatus() {
 		return status;
 	}

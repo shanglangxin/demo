@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.vo.StudentTestPaperRefVO;
 import com.example.demo.vo.StudentTestPaperVO;
 import com.example.demo.vo.TestPaperDetailVO;
 import org.apache.ibatis.annotations.Param;
@@ -25,4 +26,8 @@ public interface TestPaperMapper {
     TestPaperDetailVO queryTestPaperById(Integer paperId);
 
     StudentTestPaperVO queryStudentTestPaperById(Integer paperId);
+
+    List<StudentTestPaperRefVO> queryTestPaperList(Map<String,Object> param);
+
+    void deleteTestPaper(Integer paperId);
 }

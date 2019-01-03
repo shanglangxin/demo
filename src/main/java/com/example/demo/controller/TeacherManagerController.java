@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dto.TeachClassDTO;
 import com.example.demo.dto.TeacherDTO;
 import com.example.demo.pojo.DepartmentPO;
+import com.example.demo.vo.TestClassVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,6 +70,29 @@ public class TeacherManagerController {
 	public Result queryDepartmentList(){
 		List<DepartmentPO> list = teacherManagerService.queryDepartmentList();
 		return ResultUtil.addResult(list);
+	}
+
+	@ResponseBody
+	@PostMapping(value="/addTeachClass")
+	public Result addTeachClass(@RequestBody TeachClassDTO dto) throws MyException {
+		teacherManagerService.addTeachClass(dto);
+		return ResultUtil.success();
+	}
+
+	@ResponseBody
+	@PostMapping(value="/queryTeachClass")
+	public Result queryTeachClass(@RequestBody String param){
+		JSONObject jsonObject = JSON.parseObject(param);
+		String staffId = (String) jsonObject.get("staffId");
+		List<TestClassVO> list = teacherManagerService.queryTeachClass(staffId);
+		return ResultUtil.addResult(list);
+	}
+
+	@ResponseBody
+	@PostMapping(value="/deleteTeachClass")
+	public Result deleteTeachClass(@RequestBody TeachClassDTO dto){
+		teacherManagerService.deleteTeachClass(dto);
+		return ResultUtil.success();
 	}
 
 }

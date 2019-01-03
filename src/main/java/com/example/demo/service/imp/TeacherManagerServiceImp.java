@@ -3,8 +3,11 @@ package com.example.demo.service.imp;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dto.TeachClassDTO;
+import com.example.demo.dto.TestClassDTO;
 import com.example.demo.mapper.ClassMapper;
 import com.example.demo.pojo.DepartmentPO;
+import com.example.demo.vo.TestClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +57,6 @@ public class TeacherManagerServiceImp implements ITeacherManagerService {
 
 	@Override
 	public void deleteTeacherInfo(List<String> ids) {
-		// TODO Auto-generated method stub
 		teacherMapper.deleteTeacherInfo(ids);
 		accountMapper.deleteAccountInfo(ids);
 	}
@@ -62,6 +64,30 @@ public class TeacherManagerServiceImp implements ITeacherManagerService {
 	@Override
 	public List<DepartmentPO> queryDepartmentList() {
 		return classMapper.queryDepartmentList();
+	}
+
+	@Override
+	public void addTeachClass(TeachClassDTO dto) throws MyException {
+		List<TestClassVO> list = classMapper.queryTeachClass(dto.getStaffId());
+		for(TestClassVO vo : list){
+			for(TestClassDTO classDTO : dto.getClassList()){
+				if(vo.getClassId().equals(classDTO.getClassId())){
+					throw new MyException(-1, "该班级已存在");
+				}
+			}
+		}
+		classMapper.addTeachClass(dto.getStaffId(), dto.getClassList());
+	}
+
+	@Override
+	public List<TestClassVO> queryTeachClass(String staffId) {
+		List<TestClassVO> list = classMapper.queryTeachClass(staffId);
+		return list;
+	}
+
+	@Override
+	public void deleteTeachClass(TeachClassDTO dto) {
+		classMapper.deleteTeachClass(dto.getStaffId(), dto.getClassList());
 	}
 
 }

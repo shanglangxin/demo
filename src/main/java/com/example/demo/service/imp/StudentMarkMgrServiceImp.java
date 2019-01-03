@@ -48,7 +48,8 @@ public class StudentMarkMgrServiceImp implements IStudentMarkMgrService {
             dataRow.createCell(0).setCellValue(markVO.getClassName());
             dataRow.createCell(1).setCellValue(markVO.getStaffId());
             dataRow.createCell(2).setCellValue(markVO.getStudentName());
-            dataRow.createCell(3).setCellValue(markVO.getMark());
+            String mark = markVO.getMark() == null ? "": String.valueOf(markVO.getMark());
+            dataRow.createCell(3).setCellValue(mark);
         }
         FileOutputStream os = new FileOutputStream("C:\\Users\\admin\\Desktop\\studentMark.xls");
         workbook.write(os);

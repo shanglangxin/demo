@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestClassStudentMapper">
+
+
+    <select id="queryTestClass" resultType="com.example.demo.vo.TestClassVO">
+        SELECT r.class_id, c.name AS class_name, r.department_id, d.name AS department_name
+            FROM test_paper_class_ref r
+            LEFT JOIN class c ON c.class_id = r.class_id
+            LEFT JOIN department d ON d.id = r.department_id
+        WHERE r.test_paper_id = #{paperId}
+    </select>
+
+    <insert id="saveTestClass" parameterType="map">
+        INSERT INTO test_paper_class_ref VALUES
+        <foreach collection="classList" item="item" separator=",">
+            (#{testPaperId}, #{item.classId}, #{item.departmentId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteTestClass">
+        DELETE FROM test_paper_class_ref WHERE test_paper_id = #{testPaperId} AND class_id IN
+        <foreach collection="classList" item="item" open="(" separator="," close=")">
+            #{item.classId}
+        </foreach>
+    </delete>
+
+    <insert id="saveTestStudent">
+        INSERT INTO test_paper_student_ref(test_paper_id, staff_id, class_id) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{paperId}, #{item.staffId}, #{item.classId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteTestStudent">
+        DELETE FROM test_paper_student_ref WHERE test_paper_id = #{testPaperId} AND class_id IN
+        <foreach collection="classList" item="item" open="(" separator="," close=")">
+            #{item.classId}
+        </foreach>
+    </delete>
+
+    <update id="saveTestStudentMark">
+        UPDATE test_paper_student_ref SET mark = #{mark} WHERE test_paper_id = #{paperId} AND staff_id = #{staffId}
+    </update>
+
+</mapper>

@@ -1,14 +1,19 @@
 package com.example.demo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class TestPaperPO {
 	
 	private Integer id;
 	private String title;
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	private Date startTime;
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	private Date endTime;
 	private String creator;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
 	private Integer status;
 	private Integer subjectId;

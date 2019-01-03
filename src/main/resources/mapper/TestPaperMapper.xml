@@ -15,22 +15,23 @@
     </update>
 
     <select id="queryPaperList" resultType="com.example.demo.pojo.TestPaperPO">
-        SELECT * FROM test_paper
+        SELECT p.* FROM test_paper p
+          LEFT JOIN subject s ON s.id = p.subject_id
         <where>
             <if test="title != null and title != ''">
-                title LIKE CONCAT("%",#{title},"%")
+                p.title LIKE CONCAT("%",#{title},"%")
             </if>
             <if test="subjectId != null and subjectId > 0">
-                AND subject_id=#{subjectId}
+                AND p.subject_id=#{subjectId}
             </if>
             <if test="status != null">
-                AND status=#{status}
+                AND p.status=#{status}
             </if>
             <if test="creator != null and creator != ''">
-                AND creator LIKE CONCAT("%",#{creator},"%")
+                AND p.creator LIKE CONCAT("%",#{creator},"%")
             </if>
             <if test="createTime != null">
-                AND DATE_FORMAT(create_time,'%Y-%m-%d') LIKE DATE_FORMAT(#{createTime},'%Y-%m-%d')
+                AND DATE_FORMAT(p.create_time,'%Y-%m-%d') LIKE DATE_FORMAT(#{createTime},'%Y-%m-%d')
             </if>
         </where>
     </select>
@@ -42,5 +43,25 @@
     <select id="queryStudentTestPaperById" resultType="com.example.demo.vo.StudentTestPaperVO">
         SELECT id, title, duration duration, subject_id FROM test_paper WHERE id = #{paperId}
     </select>
+
+    <select id="queryTestPaperList" resultType="com.example.demo.vo.StudentTestPaperRefVO">
+        SELECT p.id, p.title, p.creator, s.`name` AS subject , r.mark
+            FROM test_paper_student_ref r
+            LEFT JOIN test_paper p ON p.id = r.test_paper_id
+            LEFT JOIN `subject` s ON s.id = p.subject_id
+        <where>
+            r.staff_id = #{staffId}
+            <if test="title != null and title != ''">
+                AND p.title LIKE CONCAT("%",#{title},"%")
+            </if>
+            <if test="subjectId != null and subjectId > 0">
+                AND p.subject_id=#{subjectId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteTestPaper">
+        DELETE FROM test_paper WHERE id = #{paperId}
+    </delete>
 
 </mapper>

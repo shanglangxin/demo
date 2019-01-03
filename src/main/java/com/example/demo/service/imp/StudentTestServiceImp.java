@@ -1,9 +1,11 @@
 package com.example.demo.service.imp;
 
 import com.example.demo.dto.SubmitPaperQuestionDTO;
+import com.example.demo.mapper.TestClassStudentMapper;
 import com.example.demo.mapper.TestPaperMapper;
 import com.example.demo.mapper.TestPaperQuestionMapper;
 import com.example.demo.mapper.TestQuestionOptionMapper;
+import com.example.demo.pojo.TestPaperPO;
 import com.example.demo.pojo.TestQuestionOptionPO;
 import com.example.demo.service.IStudentTestService;
 import com.example.demo.util.MyException;
@@ -24,6 +26,8 @@ public class StudentTestServiceImp implements IStudentTestService {
     private TestPaperQuestionMapper testPaperQuestionMapper;
     @Autowired
     private TestQuestionOptionMapper testQuestionOptionMapper;
+    @Autowired
+    private TestClassStudentMapper testClassStudentMapper;
 
     @Override
     public StudentTestPaperVO queryTestPaper(Integer paperId) throws MyException {
@@ -86,7 +90,14 @@ public class StudentTestServiceImp implements IStudentTestService {
             }
         }
         Integer mark = count*100/list.size();
+        testClassStudentMapper.saveTestStudentMark((Integer)param.get("paperId"), (String)param.get("staffId"), mark);
         return mark;
+    }
+
+    @Override
+    public List<StudentTestPaperRefVO> queryTestPaperList(Map<String, Object> param) {
+        List<StudentTestPaperRefVO> list = testPaperMapper.queryTestPaperList(param);
+        return list;
     }
 
 

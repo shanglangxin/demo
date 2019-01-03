@@ -1,25 +1,22 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.dto.TestPaperDTO;
-import com.example.demo.dto.TestPaperSearchDTO;
-import com.example.demo.dto.QuestionCountDTO;
+import com.example.demo.dto.*;
 import com.example.demo.pojo.AccountPO;
 import com.example.demo.pojo.TestPaperPO;
 import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.Result;
 import com.example.demo.util.ResultUtil;
+import com.example.demo.vo.TestClassVO;
 import com.example.demo.vo.TestPaperDetailVO;
 import com.example.demo.vo.QuestionDetailVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -91,6 +88,45 @@ public class TestPaperMgrController extends BaseController {
     	Integer paperId = (Integer) jsonObject.get("paperId");
     	TestPaperDetailVO vo = testPaperMgrService.queryPaperDetail(paperId);
     	return ResultUtil.addResult(vo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/deleteTestPaper", method=RequestMethod.POST)
+    public Result deleteTestPaper(@RequestBody String param) throws MyException {
+        JSONObject jsonObject = JSON.parseObject(param);
+        JSONArray idArray = (JSONArray)jsonObject.get("ids");
+        List<Integer> ids = JSONArray.parseArray(idArray.toString(), Integer.class);
+        testPaperMgrService.deleteTestPaper(ids);
+        return ResultUtil.success();
+    }
+
+    @ResponseBody
+    @PostMapping(value="/queryTestClass")
+    public Result queryTestClass(@RequestBody String param){
+        JSONObject jsonObject = JSON.parseObject(param);
+        Integer paperId = (Integer) jsonObject.get("testPaperId");
+        List<TestClassVO> list = testPaperMgrService.queryTestClass(paperId);
+        return ResultUtil.addResult(list);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/saveTestClass")
+    public Result saveTestClass(@RequestBody SaveTestClassDTO dto) throws MyException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("testPaperId", dto.getTestPaperId());
+        param.put("classList", dto.getClassList());
+        testPaperMgrService.saveTestClass(param);
+        return ResultUtil.success();
+    }
+
+    @ResponseBody
+    @PostMapping(value="/deleteTestClass")
+    public Result deleteTestClass(@RequestBody SaveTestClassDTO dto){
+        Map<String, Object> param = new HashMap<>();
+        param.put("testPaperId", dto.getTestPaperId());
+        param.put("classList", dto.getClassList());
+        testPaperMgrService.deleteTestClass(param);
+        return ResultUtil.success();
     }
 
 }

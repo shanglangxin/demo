@@ -1,16 +1,17 @@
 package com.example.demo.service.imp;
 
+import com.example.demo.dto.TestClassDTO;
 import com.example.demo.dto.TestPaperQuestionDTO;
 import com.example.demo.mapper.*;
 import com.example.demo.pojo.OptionPO;
+import com.example.demo.pojo.StudentPO;
 import com.example.demo.pojo.TestQuestionOptionPO;
 import com.example.demo.pojo.TestPaperPO;
 import com.example.demo.service.ITestPaperMgrService;
+import com.example.demo.util.AssertUtil;
 import com.example.demo.util.MyException;
 import com.example.demo.util.QuestionTypeUtil;
-import com.example.demo.vo.TestPaperDetailVO;
-import com.example.demo.vo.QuestionDetailVO;
-import com.example.demo.vo.TestPaperQuestionDetailVO;
+import com.example.demo.vo.*;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
     private TestPaperQuestionMapper testPaperQuestionMapper;
     @Autowired
 	private TestQuestionOptionMapper testQuestionOptionMapper;
+    @Autowired
+	private TestClassStudentMapper testClassStudentMapper;
+    @Autowired
+	private StudentMapper studentMapper;
     
     @Override
 	public List<TestPaperPO> queryPaperList(Map<String, Object> param) {
@@ -63,7 +68,6 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 
 	@Override
 	public List<QuestionDetailVO> autoCreateQuestionList(Map<String, Object> param) throws MyException {
-		// TODO Auto-generated method stub
 		List<QuestionDetailVO> list = new ArrayList<>();
         Integer singleChoiceCount = (Integer) param.get("singleChoiceCount");
         Integer multiChoiceCount = (Integer) param.get("multiChoiceCount");
@@ -101,7 +105,6 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 	
 	@Override
 	public TestPaperDetailVO queryPaperDetail(Integer paperId) {
-		// TODO Auto-generated method stub
 		TestPaperDetailVO paperDetailVO = testPaperMapper.queryTestPaperById(paperId);
 		List<TestPaperQuestionDetailVO> list = testPaperQuestionMapper.queryTestQuestionByPaperId(paperId);
 		for(TestPaperQuestionDetailVO vo : list){
@@ -118,7 +121,50 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 		paperDetailVO.setQuestionList(list);
 		return paperDetailVO;
 	}
-    
+
+	@Override
+	public List<TestClassVO> queryTestClass(Integer paperId) {
+		List<TestClassVO> list = testClassStudentMapper.queryTestClass(paperId);
+		return list;
+	}
+
+	@Override
+	public void saveTestClass(Map<String, Object> param) throws MyException {
+		Integer paperId = (Integer) param.get("testPaperId");
+		List<TestClassDTO> classList = (List<TestClassDTO>) param.get("classList");
+		List<TestClassVO> list = testClassStudentMapper.queryTestClass(paperId);
+		for(TestClassVO vo : list){
+			for(TestClassDTO dto : classList){
+				if(vo.getClassId().equals(dto.getClassId())){
+					throw new MyException(-1, "存在相同班级");
+				}
+			}
+		}
+		testClassStudentMapper.saveTestClass(param);
+		List<StudentPO> studentList = studentMapper.queryStudentByClassId(classList);
+		testClassStudentMapper.saveTestStudent(paperId, studentList);
+	}
+
+	@Override
+	public void deleteTestClass(Map<String, Object> param) {
+		testClassStudentMapper.deleteTestClass(param);
+		testClassStudentMapper.deleteTestStudent(param);
+	}
+
+	@Override
+	public void deleteTestPaper(List<Integer> ids) throws MyException {
+    	for(Integer paperId : ids){
+    		List<TestClassVO> classList = testClassStudentMapper.queryTestClass(paperId);
+    		if(!AssertUtil.isEmpty(classList)){
+    			throw new MyException(-1, "试卷编号为"+paperId+"仍有班级在考试");
+			}
+			List<Integer> list = testPaperQuestionMapper.queryTestQuestionIdsByPaperId(paperId);
+			testQuestionOptionMapper.deleteOptionByTestQuestionIds(list);
+			testPaperQuestionMapper.deleteQuestionsByPaperId(paperId);
+			testPaperMapper.deleteTestPaper(paperId);
+		}
+	}
+
 	/**
 	 * 获取题目
 	 * @param table

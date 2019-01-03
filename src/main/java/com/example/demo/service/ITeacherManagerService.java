@@ -3,9 +3,11 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dto.TeachClassDTO;
 import com.example.demo.pojo.DepartmentPO;
 import com.example.demo.pojo.TeacherPO;
 import com.example.demo.util.MyException;
+import com.example.demo.vo.TestClassVO;
 
 public interface ITeacherManagerService {
 
@@ -16,4 +18,10 @@ public interface ITeacherManagerService {
 	void deleteTeacherInfo(List<String> ids);
 
     List<DepartmentPO> queryDepartmentList();
+
+    void addTeachClass(TeachClassDTO dto) throws MyException;
+
+	List<TestClassVO> queryTeachClass(String staffId);
+
+	void deleteTeachClass(TeachClassDTO dto);
 }

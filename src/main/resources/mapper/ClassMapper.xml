@@ -15,5 +15,26 @@
     <select id="queryDepartmentList" resultType="com.example.demo.pojo.DepartmentPO">
         SELECT * FROM department
     </select>
+    
+    <insert id="addTeachClass">
+        INSERT INTO class_teacher_ref VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.classId},#{staffId} , #{item.departmentId})
+        </foreach>
+    </insert>
+
+    <select id="queryTeachClass" resultType="com.example.demo.vo.TestClassVO">
+        SELECT c.class_id AS class_id, c.`name` AS class_name, d.id AS department_id, d.`name` AS department_name FROM class_teacher_ref r
+          LEFT JOIN class c ON r.class_id = c.class_id
+           LEFT JOIN department d ON d.id = r.department_id
+        WHERE r.teacher_id = #{staffId}
+    </select>
+
+    <delete id="deleteTeachClass">
+        DELETE FROM class_teacher_ref WHERE teacher_id = #{staffId} AND class_id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.classId}
+        </foreach>
+    </delete>
 
 </mapper>
