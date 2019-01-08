@@ -1,12 +1,16 @@
 package com.example.demo.service.imp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.example.demo.dto.TeachClassDTO;
+import com.example.demo.dto.TeachSubjectDTO;
 import com.example.demo.dto.TestClassDTO;
 import com.example.demo.mapper.ClassMapper;
+import com.example.demo.mapper.SubjectMapper;
 import com.example.demo.pojo.DepartmentPO;
+import com.example.demo.pojo.SubjectPO;
 import com.example.demo.vo.TestClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,8 @@ public class TeacherManagerServiceImp implements ITeacherManagerService {
 	private AccountMapper accountMapper;
 	@Autowired
 	private ClassMapper classMapper;
+	@Autowired
+	private SubjectMapper subjectMapper;
 	
 	@Override
 	public List<TeacherPO> queryTeacherList(Map<String, Object> param) {
@@ -88,6 +94,30 @@ public class TeacherManagerServiceImp implements ITeacherManagerService {
 	@Override
 	public void deleteTeachClass(TeachClassDTO dto) {
 		classMapper.deleteTeachClass(dto.getStaffId(), dto.getClassList());
+	}
+
+	@Override
+	public void addTeachSubject(TeachSubjectDTO dto) throws MyException {
+		Map<String, Object> param = new HashMap<>();
+		param.put("username", dto.getStaffId());
+		List<SubjectPO> list = subjectMapper.querySubjects(param);
+		for(SubjectPO subjectPO : list){
+			for (Integer id : dto.getSubjectList()){
+				if(id.equals(subjectPO.getId())){
+					throw new MyException(-1,"任教科目已添加");
+				}
+			}
+		}
+		subjectMapper.addTeachSubject(dto.getStaffId(), dto.getSubjectList());
+	}
+
+	@Override
+	public List<SubjectPO> querySubjectList(String title) {
+		if(AssertUtil.isEmpty(title)){
+			title = "";
+		}
+		subjectMapper.querySubjectList(title);
+		return null;
 	}
 
 }

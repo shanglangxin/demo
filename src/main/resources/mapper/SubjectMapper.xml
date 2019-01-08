@@ -8,4 +8,22 @@
         SELECT * FROM subject_teacher_ref r LEFT JOIN subject s ON r.subject_id = s.id WHERE r.username = #{username}
     </select>
 
+    <insert id="addTeachSubject" >
+        INSERT INTO subject_teacher_ref VALUES
+        <foreach collection="list" item="id" separator=",">
+            (#{staffId}, #{id}, #{staffId})
+        </foreach>
+    </insert>
+
+    <select id="querySubjectList" parameterType="com.example.demo.pojo.SubjectPO">
+        SELECT * FROM subject
+        <where>
+            <if test="title != null and title != ''">
+                `name` = #{title}
+            </if>
+        </where>
+    </select>
+
+
+
 </mapper>
