@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.pojo.SubjectPO;
 import com.example.demo.vo.QuestionDetailVO;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +41,6 @@ public interface IQuestionMgrService {
      * @param param
      */
     void deleteQuestion(Map<String, Object> param);
+
+    void importQuestionList(File file, String savePath) throws IOException;
 }

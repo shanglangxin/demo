@@ -23,4 +23,10 @@
         ORDER BY r.class_id DESC
     </select>
 
+    <delete id="batchDeleteStudentMark">
+        <foreach collection="list" item="item" separator=";">
+            DELETE FROM test_paper_student_ref WHERE test_paper_id = #{item.testPaperId} AND staff_id = #{item.staffId}
+        </foreach>
+    </delete>
+
 </mapper>

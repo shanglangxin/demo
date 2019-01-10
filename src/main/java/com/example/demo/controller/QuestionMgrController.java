@@ -6,21 +6,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.dto.SearchQuesiotnDTO;
 import com.example.demo.pojo.AccountPO;
+import com.example.demo.pojo.Question;
 import com.example.demo.pojo.SubjectPO;
 import com.example.demo.service.IQuestionMgrService;
-import com.example.demo.util.MyException;
-import com.example.demo.util.Result;
-import com.example.demo.util.ResultUtil;
+import com.example.demo.util.*;
 import com.example.demo.vo.QuestionDetailVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
 
 @RequestMapping("/question/mgr")
 @Controller
@@ -101,6 +101,21 @@ public class QuestionMgrController extends BaseController {
         return ResultUtil.success();
     }
 
-//    public Result importQuestionList()
+    @RequestMapping(value="/importQuestionList")
+    public void importQuestionList(@RequestParam("file")MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException, MyException {
+        if(!file.isEmpty()){
+            String filePath = file.getOriginalFilename();
+            String savePath = "C:\\Users\\admin\\Desktop\\layui-v2.4.5\\"+filePath;
+            File targetFile = new File(savePath);
+//            if(!targetFile.exists()){
+//                targetFile.mkdirs();
+//            }
+            file.transferTo(targetFile);
+            questionMgrService.importQuestionList(targetFile, savePath);
+        }else{
+            throw new MyException(-1,"上传失败");
+        }
+//        return ResultUtil.success();
+    }
 
 }

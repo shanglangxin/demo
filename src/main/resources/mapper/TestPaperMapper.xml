@@ -45,7 +45,7 @@
     </select>
 
     <select id="queryTestPaperList" resultType="com.example.demo.vo.StudentTestPaperRefVO">
-        SELECT p.id, p.title, p.creator, s.`name` AS subject , r.mark
+        SELECT p.id, p.title, p.creator, s.`name` AS subject , r.mark, r.submit_count
             FROM test_paper_student_ref r
             LEFT JOIN test_paper p ON p.id = r.test_paper_id
             LEFT JOIN `subject` s ON s.id = p.subject_id

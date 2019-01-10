@@ -17,7 +17,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(true);
         AccountPO user = (AccountPO) session.getAttribute("user");
         if(AssertUtil.isEmpty(user)){
-            response.sendRedirect("/login");
+//            response.sendRedirect("/");
             return false;
         }else{
             return true;

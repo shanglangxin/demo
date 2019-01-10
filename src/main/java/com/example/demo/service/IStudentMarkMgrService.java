@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.DeleteMarkDTO;
 import com.example.demo.vo.StudentMarkVO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,4 +13,6 @@ public interface IStudentMarkMgrService {
     List<StudentMarkVO> queryStudentMarkList(Map<String,Object> param);
 
     void exportStudentMarkList(Map<String, Object> param, HttpServletResponse response) throws IOException;
+
+    void batchDeleteStudentMark(List<DeleteMarkDTO> list);
 }

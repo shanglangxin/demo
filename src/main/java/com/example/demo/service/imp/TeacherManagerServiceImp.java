@@ -116,8 +116,8 @@ public class TeacherManagerServiceImp implements ITeacherManagerService {
 		if(AssertUtil.isEmpty(title)){
 			title = "";
 		}
-		subjectMapper.querySubjectList(title);
-		return null;
+		List<SubjectPO> list = subjectMapper.querySubjectList(title);
+		return list;
 	}
 
 }

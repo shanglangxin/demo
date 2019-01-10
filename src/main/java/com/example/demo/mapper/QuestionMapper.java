@@ -1,9 +1,10 @@
 package com.example.demo.mapper;
 
-import com.example.demo.pojo.Question;
+import com.example.demo.vo.ImportQuestionVO;
 import com.example.demo.vo.QuestionDetailVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -36,4 +37,8 @@ public interface QuestionMapper {
     List<QuestionDetailVO> queryQuestionList(@Param("table") String table, @Param("list") List<Integer> idList);
 
     List<Integer> queryQuestionIdList(@Param("table") String table, @Param("subjectId") Integer subjectId);
+
+    void batchAddQuestions(@Param("list") List<ImportQuestionVO> list, @Param("tableName") String tableName);
+
+    void batchAddQuestions1(List<ImportQuestionVO> list);
 }

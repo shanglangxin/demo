@@ -55,4 +55,17 @@
         </where>
     </select>
 
+    <insert id="batchAddQuestions" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ${tableName}(title, answer, show_title, subject_id, type) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.title}, #{item.answer}, #{item.showTitle}, #{item.subjectId}, #{item.type})
+        </foreach>
+    </insert>
+
+    <insert id="batchAddQuestions1" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        <foreach collection="list" item="item" separator=";">
+        INSERT INTO ${item.tableName}(title, answer, show_title, subject_id, type) VALUES(#{item.title}, #{item.answer}, #{item.showTitle}, #{item.subjectId}, #{item.type})
+        </foreach>
+    </insert>
+
 </mapper>

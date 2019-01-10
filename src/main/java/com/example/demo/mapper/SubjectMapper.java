@@ -1,6 +1,5 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.TeachSubjectDTO;
 import com.example.demo.pojo.SubjectPO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -14,5 +13,5 @@ public interface SubjectMapper {
 
     void addTeachSubject(@Param("staffId")String staffId, @Param("list")List<Integer> subjectList);
 
-    void querySubjectList(String title);
+    List<SubjectPO> querySubjectList(@Param("title")String title);
 }

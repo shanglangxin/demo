@@ -42,7 +42,7 @@
     </delete>
 
     <update id="saveTestStudentMark">
-        UPDATE test_paper_student_ref SET mark = #{mark} WHERE test_paper_id = #{paperId} AND staff_id = #{staffId}
+        UPDATE test_paper_student_ref SET mark = #{mark}, submit_count=submit_count+1 WHERE test_paper_id = #{paperId} AND staff_id = #{staffId}
     </update>
 
 </mapper>

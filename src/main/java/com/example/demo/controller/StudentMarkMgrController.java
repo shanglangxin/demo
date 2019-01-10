@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.dto.DeleteMarkDTO;
 import com.example.demo.dto.StudentMarkSearchDTO;
 import com.example.demo.service.IStudentMarkMgrService;
 import com.example.demo.util.Result;
@@ -52,10 +53,14 @@ public class StudentMarkMgrController {
         studentMarkMgrService.exportStudentMarkList(param, response);
     }
 
-//    public Result batchDeleteStudentMark(@RequestBody String param){
-//        JSONObject jsonObject = JSON.parseObject(param);
-//        JSONArray idArray = (JSONArray) jsonObject.get("ids");
-//        List<Integer>
-//    }
-    
+    @ResponseBody
+    @PostMapping(value = "/batchDeleteStudentMark")
+    public Result batchDeleteStudentMark(@RequestBody String param){
+        JSONObject jsonObject = JSON.parseObject(param);
+        JSONArray idArray = (JSONArray) jsonObject.get("param");
+        List<DeleteMarkDTO> list = JSONArray.parseArray(idArray.toString(),DeleteMarkDTO.class);
+        studentMarkMgrService.batchDeleteStudentMark(list);
+        return ResultUtil.success();
+    }
+
 }

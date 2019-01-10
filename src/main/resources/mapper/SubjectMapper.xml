@@ -15,7 +15,7 @@
         </foreach>
     </insert>
 
-    <select id="querySubjectList" parameterType="com.example.demo.pojo.SubjectPO">
+    <select id="querySubjectList" resultType="com.example.demo.pojo.SubjectPO">
         SELECT * FROM subject
         <where>
             <if test="title != null and title != ''">

@@ -26,4 +26,13 @@
         </foreach>
     </delete>
 
+    <insert id="batchAddOptions" parameterType="com.example.demo.vo.ImportQuestionVO">
+        <foreach collection="list" item="item" separator=";">
+            INSERT INTO `option`(name,question_id, question_type) VALUES
+            <foreach collection="item.optionTitleList" item="option" separator=",">
+                (#{option}, #{item.id}, #{item.type})
+            </foreach>
+        </foreach>
+    </insert>
+
 </mapper>

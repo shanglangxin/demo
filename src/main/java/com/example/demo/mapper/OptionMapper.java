@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.pojo.OptionPO;
+import com.example.demo.vo.ImportQuestionVO;
 import com.example.demo.vo.QuestionDetailVO;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,6 @@ public interface OptionMapper {
     List<OptionPO> queryOptionListByQuestionId(QuestionDetailVO vo);
 
     void deleteOptionByQuestionIds(Map<String,Object> param);
+
+    void batchAddOptions(List<ImportQuestionVO> list);
 }

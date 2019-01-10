@@ -9,6 +9,15 @@ public class StudentMarkVO {
     private String classId;
     private String className;
     private String title;
+    private Integer submitCount;
+
+    public Integer getSubmitCount() {
+        return submitCount;
+    }
+
+    public void setSubmitCount(Integer submitCount) {
+        this.submitCount = submitCount;
+    }
 
     public String getTitle() {
         return title;

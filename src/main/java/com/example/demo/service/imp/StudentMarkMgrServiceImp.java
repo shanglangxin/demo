@@ -1,5 +1,6 @@
 package com.example.demo.service.imp;
 
+import com.example.demo.dto.DeleteMarkDTO;
 import com.example.demo.mapper.TestPaperStudentRefMapper;
 import com.example.demo.service.IStudentMarkMgrService;
 import com.example.demo.vo.StudentMarkVO;
@@ -69,5 +70,10 @@ public class StudentMarkMgrServiceImp implements IStudentMarkMgrService {
         outputStream.flush();
         outputStream.close();
         workbook.close();
+    }
+
+    @Override
+    public void batchDeleteStudentMark(List<DeleteMarkDTO> list) {
+        testPaperStudentRefMapper.batchDeleteStudentMark(list);
     }
 }

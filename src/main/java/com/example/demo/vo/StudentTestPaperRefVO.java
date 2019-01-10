@@ -7,6 +7,15 @@ public class StudentTestPaperRefVO {
     private String creator;
     private String subject;
     private Double mark;
+    private Integer submitCount;
+
+    public Integer getSubmitCount() {
+        return submitCount;
+    }
+
+    public void setSubmitCount(Integer submitCount) {
+        this.submitCount = submitCount;
+    }
 
     public Integer getId() {
         return id;
