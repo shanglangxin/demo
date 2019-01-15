@@ -183,8 +183,11 @@ public class DemoApplicationTests {
 	
 	@Test
 	public void testDeleteStudent(){
-//		List<Integer> list = Arrays.asList(new Integer[]{1,2});
-//		teacherManagerService.deleteTeacherInfo(list);
+		String title = "<p>iuuhsfie8wy328idhffh982ioidfuayoye87tr37yrioirweriewryiuew</p>";
+		int index = title.indexOf("<p>");
+		StringBuffer sb = new StringBuffer(title);
+		sb.insert(index+3,"1、");
+		System.out.print(sb.toString());
 	}
 
 }

@@ -50,7 +50,7 @@
             LEFT JOIN test_paper p ON p.id = r.test_paper_id
             LEFT JOIN `subject` s ON s.id = p.subject_id
         <where>
-            r.staff_id = #{staffId}
+            r.staff_id = #{staffId} AND DATE_FORMAT(now(),'%Y-%m-%d') => p.start_time AND p.end_time => DATE_FORMAT(now(),'%Y-%m-%d')
             <if test="title != null and title != ''">
                 AND p.title LIKE CONCAT("%",#{title},"%")
             </if>

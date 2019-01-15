@@ -62,7 +62,7 @@ public class StudentTestServiceImp implements IStudentTestService {
 
     @Override
     public Integer submitTestPaper(Map<String, Object> param) {
-        Integer count = 0;
+        Integer totalMark = 0;
         List<TestPaperQuestionDetailVO> questionList = testPaperQuestionMapper.queryTestQuestionByPaperId((Integer) param.get("paperId"));
         List<SubmitPaperQuestionDTO> list = (List<SubmitPaperQuestionDTO>) param.get("questionList");
         Map<Integer, TestPaperQuestionDetailVO> answerMap = new HashMap<>();
@@ -86,10 +86,10 @@ public class StudentTestServiceImp implements IStudentTestService {
         for(SubmitPaperQuestionDTO question : list){
             TestPaperQuestionDetailVO answer = answerMap.get(question.getId());
             if(answer.getAnswer().equals(question.getAnswer())){
-                count += 1;
+                totalMark += answer.getMark();
             }
         }
-        Integer mark = count*100/list.size();
+        Integer mark = totalMark;
         testClassStudentMapper.saveTestStudentMark((Integer)param.get("paperId"), (String)param.get("staffId"), mark);
         return mark;
     }

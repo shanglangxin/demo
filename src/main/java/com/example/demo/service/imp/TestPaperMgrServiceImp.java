@@ -15,6 +15,7 @@ import com.example.demo.vo.*;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -43,11 +44,13 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 	}
 
     @Override
+	@Transactional
     public void addOrUpdatePaper(Map<String, Object> param) throws MyException {
     	Integer status = this.handlePaperStatus((Date) param.get("startTime"), (Date) param.get("endTime"));
     	param.put("status", status);
     	Integer id = (Integer) param.get("id");
 		List<TestPaperQuestionDTO> list = (List<TestPaperQuestionDTO>) param.get("questionList");
+		this.handleQuestionSort(list);
 		this.handleQuestionAnswer(list);
     	if(id == null || id == 0){
 			testPaperMapper.addPaper(param);
@@ -65,6 +68,20 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 			}
 		}
     }
+
+	private void handleQuestionSort(List<TestPaperQuestionDTO> list) {
+    	Integer sort = 1;
+    	for(TestPaperQuestionDTO dto : list){
+    		String showTitle = dto.getShowTitle();
+    		int index = showTitle.indexOf("<p>");
+			StringBuffer sb = new StringBuffer(showTitle);
+			dto.setSort(sort);
+			String questionSort = sort+"、";
+			sort += 1;
+			sb.insert(index+3, questionSort);
+//			dto.setShowTitle(sb.toString());
+		}
+	}
 
 	@Override
 	public List<QuestionDetailVO> autoCreateQuestionList(Map<String, Object> param) throws MyException {
@@ -129,6 +146,7 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 	}
 
 	@Override
+	@Transactional
 	public void saveTestClass(Map<String, Object> param) throws MyException {
 		Integer paperId = (Integer) param.get("testPaperId");
 		List<TestClassDTO> classList = (List<TestClassDTO>) param.get("classList");
@@ -146,12 +164,14 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteTestClass(Map<String, Object> param) {
 		testClassStudentMapper.deleteTestClass(param);
 		testClassStudentMapper.deleteTestStudent(param);
 	}
 
 	@Override
+	@Transactional
 	public void deleteTestPaper(List<Integer> ids) throws MyException {
     	for(Integer paperId : ids){
     		List<TestClassVO> classList = testClassStudentMapper.queryTestClass(paperId);

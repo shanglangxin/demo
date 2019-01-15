@@ -3,19 +3,22 @@ package com.example.demo.dto;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class TestPaperDTO {
 
     private Integer id;
     @NotEmpty(message="试卷标题不能为空")
     private String title;
-    @NotEmpty(message="考试时间不能为空")
+    @NotNull(message="考试时间不能为空")
     private Integer duration;
+    @Future(message = "发布时间不能是过去的时间")
     private Date startTime;
     private Date endTime;
     private Integer status;
-    @NotEmpty(message="试卷科目不能为空")
+    @NotNull(message="试卷科目不能为空")
     private Integer subjectId;
     private List<TestPaperQuestionDTO> questionList;
     private Integer totalMark;

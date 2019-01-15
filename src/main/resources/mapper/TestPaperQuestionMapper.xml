@@ -5,9 +5,9 @@
 <mapper namespace="com.example.demo.mapper.TestPaperQuestionMapper">
 
     <insert id="addTestPaperQuestions" parameterType="list" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO test_paper_question(title, showTitle, answer, type, test_paper_id, sort) VALUES
+        INSERT INTO test_paper_question(title, showTitle, answer, type, test_paper_id, sort, mark) VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.title}, #{item.showTitle}, #{item.answer}, #{item.type}, #{paperId}, #{item.sort})
+            (#{item.title}, #{item.showTitle}, #{item.answer}, #{item.type}, #{paperId}, #{item.sort}, #{item.mark})
         </foreach>
     </insert>
 
