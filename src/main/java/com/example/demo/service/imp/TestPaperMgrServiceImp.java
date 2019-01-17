@@ -2,6 +2,7 @@ package com.example.demo.service.imp;
 
 import com.example.demo.dto.TestClassDTO;
 import com.example.demo.dto.TestPaperQuestionDTO;
+import com.example.demo.dto.TestQuestionNumDTO;
 import com.example.demo.mapper.*;
 import com.example.demo.pojo.OptionPO;
 import com.example.demo.pojo.StudentPO;
@@ -49,23 +50,29 @@ public class TestPaperMgrServiceImp implements ITestPaperMgrService {
     	Integer status = this.handlePaperStatus((Date) param.get("startTime"), (Date) param.get("endTime"));
     	param.put("status", status);
     	Integer id = (Integer) param.get("id");
-		List<TestPaperQuestionDTO> list = (List<TestPaperQuestionDTO>) param.get("questionList");
-		this.handleQuestionSort(list);
-		this.handleQuestionAnswer(list);
-    	if(id == null || id == 0){
-			testPaperMapper.addPaper(param);
-			testPaperQuestionMapper.addTestPaperQuestions(list, ((Long)param.get("id")).intValue());
-    	}else{
-			List<Integer> questionIdList = testPaperQuestionMapper.queryTestQuestionIdsByPaperId(id);
-			testQuestionOptionMapper.deleteOptionByTestQuestionIds(questionIdList);
-			testPaperQuestionMapper.deleteQuestionsByPaperId(id);
-			testPaperMapper.updateTestPaper(param);
-			testPaperQuestionMapper.addTestPaperQuestions(list, id);
-    	}
-		for(TestPaperQuestionDTO dto : list){
-    		if(dto.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || dto.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
-				testQuestionOptionMapper.addTestOption(dto.getId(), dto.getOptionList(), dto.getType());
+    	Byte testForm = (Byte) param.get("testForm");
+    	if(testForm.equals(new Byte("1"))){
+			List<TestPaperQuestionDTO> list = (List<TestPaperQuestionDTO>) param.get("questionList");
+			this.handleQuestionSort(list);
+			this.handleQuestionAnswer(list);
+			if(id == null || id == 0){
+				testPaperMapper.addPaper(param);
+				testPaperQuestionMapper.addTestPaperQuestions(list, ((Long)param.get("id")).intValue());
+			}else{
+				List<Integer> questionIdList = testPaperQuestionMapper.queryTestQuestionIdsByPaperId(id);
+				testQuestionOptionMapper.deleteOptionByTestQuestionIds(questionIdList);
+				testPaperQuestionMapper.deleteQuestionsByPaperId(id);
+				testPaperMapper.updateTestPaper(param);
+				testPaperQuestionMapper.addTestPaperQuestions(list, id);
 			}
+			for(TestPaperQuestionDTO dto : list){
+				if(dto.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || dto.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+					testQuestionOptionMapper.addTestOption(dto.getId(), dto.getOptionList(), dto.getType());
+				}
+			}
+		}else {
+			testPaperMapper.addPaper(param);
+			testPaperMapper.addPaperQuestionNum((Integer)param.get("id"), (TestQuestionNumDTO)param.get("questionNumDto"));
 		}
     }
 

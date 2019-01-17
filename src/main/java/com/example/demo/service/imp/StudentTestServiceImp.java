@@ -6,8 +6,10 @@ import com.example.demo.mapper.TestPaperMapper;
 import com.example.demo.mapper.TestPaperQuestionMapper;
 import com.example.demo.mapper.TestQuestionOptionMapper;
 import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.pojo.TestPaperQuestionNumPO;
 import com.example.demo.pojo.TestQuestionOptionPO;
 import com.example.demo.service.IStudentTestService;
+import com.example.demo.service.ITestPaperMgrService;
 import com.example.demo.util.MyException;
 import com.example.demo.util.QuestionTypeUtil;
 import com.example.demo.vo.*;
@@ -28,6 +30,8 @@ public class StudentTestServiceImp implements IStudentTestService {
     private TestQuestionOptionMapper testQuestionOptionMapper;
     @Autowired
     private TestClassStudentMapper testClassStudentMapper;
+    @Autowired
+    private ITestPaperMgrService testPaperMgrService;
 
     @Override
     public StudentTestPaperVO queryTestPaper(Integer paperId) throws MyException {
@@ -35,28 +39,40 @@ public class StudentTestServiceImp implements IStudentTestService {
         if(detailVO == null){
             throw new MyException(-1, "试卷不存在");
         }
-        List<TestPaperQuestionDetailVO> questionList = testPaperQuestionMapper.queryTestQuestionByPaperId(paperId);
-        for(TestPaperQuestionDetailVO vo : questionList){
-            if(vo.getType() == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
-                List<String> answerList = Arrays.asList(vo.getAnswer().split(","));
-                for(int i =0 ; i<answerList.size(); i++){
-                    answerList.set(i,"");
+        if(detailVO.getTestForm().equals(new Byte("1"))){
+            List<TestPaperQuestionDetailVO> questionList = testPaperQuestionMapper.queryTestQuestionByPaperId(paperId);
+            for(TestPaperQuestionDetailVO vo : questionList){
+                if(vo.getType() == QuestionTypeUtil.MULTIPLE_ENTRY_QUESTION){
+                    List<String> answerList = Arrays.asList(vo.getAnswer().split(","));
+                    for(int i =0 ; i<answerList.size(); i++){
+                        answerList.set(i,"");
+                    }
+                    vo.setMultiAnswer(answerList);
+                    vo.setAnswer("");
+                }else if(vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+                    vo.setMultiAnswer(new ArrayList<>());
+                    vo.setAnswer("");
+                } else{
+                    vo.setSingleAnswer("");
+                    vo.setAnswer("");
                 }
-                vo.setMultiAnswer(answerList);
-                vo.setAnswer("");
-            }else if(vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
-                vo.setMultiAnswer(new ArrayList<>());
-                vo.setAnswer("");
-            } else{
-                vo.setSingleAnswer("");
-                vo.setAnswer("");
+                if(vo.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
+                    List<TestQuestionOptionPO> optionList = testQuestionOptionMapper.queryTestOptionByTestQuestionId(vo.getId());
+                    vo.setOptionList(optionList);
+                }
             }
-            if(vo.getType() == QuestionTypeUtil.SINGLE_CHOICE_QUESTION || vo.getType() == QuestionTypeUtil.MULTIPLE_CHOICE_QUESTION){
-                List<TestQuestionOptionPO> optionList = testQuestionOptionMapper.queryTestOptionByTestQuestionId(vo.getId());
-                vo.setOptionList(optionList);
-            }
+            detailVO.setQuestionList(questionList);
+        }else{
+            TestPaperQuestionNumPO questionNumPO = testPaperMapper.queryTestPaperQuestionNumByPaperId(paperId);
+            Map<String, Object> param = new HashMap<>();
+            param.put("singleChoiceCount", questionNumPO.getSingleChoiceCount());
+            param.put("multiChoiceCount", questionNumPO.getMultiChoiceCount());
+            param.put("multiEntryCount", questionNumPO.getMultiEntryCount());
+            param.put("judgeCount", questionNumPO.getJudgeCount());
+            param.put("completionCount", questionNumPO.getCompletionCount());
+            List<QuestionDetailVO> list = testPaperMgrService.autoCreateQuestionList(param);
         }
-        detailVO.setQuestionList(questionList);
+
         return detailVO;
     }
 

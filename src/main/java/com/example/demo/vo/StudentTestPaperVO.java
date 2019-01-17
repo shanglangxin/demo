@@ -9,7 +9,16 @@ public class StudentTestPaperVO {
     private String title;
     private Integer duration;
     private Integer subjectId;
+    private Byte testForm;
     private List<TestPaperQuestionDetailVO> questionList;
+
+    public Byte getTestForm() {
+        return testForm;
+    }
+
+    public void setTestForm(Byte testForm) {
+        this.testForm = testForm;
+    }
 
     public Integer getId() {
         return id;

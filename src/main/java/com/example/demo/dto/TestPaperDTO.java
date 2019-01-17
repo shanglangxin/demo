@@ -22,6 +22,16 @@ public class TestPaperDTO {
     private Integer subjectId;
     private List<TestPaperQuestionDTO> questionList;
     private Integer totalMark;
+    private TestQuestionNumDTO questionNumDto;
+    private Byte testForm;
+
+    public Byte getTestForm() {
+        return testForm;
+    }
+
+    public void setTestForm(Byte testForm) {
+        this.testForm = testForm;
+    }
 
     public Integer getSubjectId() {
         return subjectId;
@@ -95,5 +105,11 @@ public class TestPaperDTO {
 		this.questionList = questionList;
 	}
 
-    
+    public TestQuestionNumDTO getQuestionNumDto() {
+        return questionNumDto;
+    }
+
+    public void setQuestionNumDto(TestQuestionNumDTO questionNumDto) {
+        this.questionNumDto = questionNumDto;
+    }
 }

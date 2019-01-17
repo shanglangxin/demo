@@ -41,7 +41,7 @@
     </select>
 
     <select id="queryStudentTestPaperById" resultType="com.example.demo.vo.StudentTestPaperVO">
-        SELECT id, title, duration duration, subject_id FROM test_paper WHERE id = #{paperId}
+        SELECT id, title, duration duration, subject_id, test_form FROM test_paper WHERE id = #{paperId}
     </select>
 
     <select id="queryTestPaperList" resultType="com.example.demo.vo.StudentTestPaperRefVO">
@@ -63,5 +63,14 @@
     <delete id="deleteTestPaper">
         DELETE FROM test_paper WHERE id = #{paperId}
     </delete>
+    
+    <insert id="addPaperQuestionNum" >
+        INSERT INTO test_paper_question_num VALUES(#{questionNumDto.singleChoiceCount},#{questionNumDto.singleChoiceMark},#{questionNumDto.multiChoiceCount},#{questionNumDto.multiChoiceMark},#{questionNumDto.completionCount}
+          ,#{questionNumDto.completionMark},#{questionNumDto.multiEntryCount},#{questionNumDto.multiEntryMark},#{questionNumDto.judgeCount},#{questionNumDto.judgeChoiceNum},#{testPaperId})
+    </insert>
+
+    <select id="queryTestPaperQuestionNumByPaperId" resultType="com.example.demo.pojo.TestPaperQuestionNumPO">
+        SELECT * FROM test_paper_question_num;
+    </select>
 
 </mapper>

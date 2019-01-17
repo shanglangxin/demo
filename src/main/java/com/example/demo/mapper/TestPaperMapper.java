@@ -1,6 +1,8 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.TestQuestionNumDTO;
 import com.example.demo.pojo.TestPaperPO;
+import com.example.demo.pojo.TestPaperQuestionNumPO;
 import com.example.demo.vo.StudentTestPaperRefVO;
 import com.example.demo.vo.StudentTestPaperVO;
 import com.example.demo.vo.TestPaperDetailVO;
@@ -30,4 +32,8 @@ public interface TestPaperMapper {
     List<StudentTestPaperRefVO> queryTestPaperList(Map<String,Object> param);
 
     void deleteTestPaper(Integer paperId);
+
+    void addPaperQuestionNum(@Param("testPaperId") Integer id, @Param("questionNumDto") TestQuestionNumDTO questionNumDto);
+
+    TestPaperQuestionNumPO queryTestPaperQuestionNumByPaperId(Integer paperId);
 }

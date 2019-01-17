@@ -44,7 +44,9 @@ public class TestPaperMgrController extends BaseController {
         param.put("totalMark", dto.getTotalMark());
         param.put("endTime", dto.getEndTime());
         param.put("questionList", dto.getQuestionList());
+        param.put("questionNumDto", dto.getQuestionNumDto());
         param.put("subjectId", dto.getSubjectId());
+        param.put("testForm", dto.getTestForm());
         AccountPO user = getUser();
         param.put("creator", user.getName());
         param.put("createTime", new Date());
