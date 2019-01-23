@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ExerciseQuestionMapper">
+
+    <select id="queryExerciseQuestionList" resultType="com.example.demo.vo.ExerciseQuestionVO">
+        SELECT * FROM exercise_question
+        <where>
+            <if test="subjectId != null">
+                subject_id = #{subject}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        </where>
+        ORDER BY rand()
+        <if test="questionCount != null">
+            LIMIT ${questionCount}
+        </if>
+    </select>
+
+    <select id="queryOptionByQuestionId" resultType="com.example.demo.vo.ExerciseOptionVO">
+        SELECT * FROM exercise_option WHERE question_id = #{id}
+    </select>
+
+</mapper>
