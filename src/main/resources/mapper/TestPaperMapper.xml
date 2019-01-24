@@ -73,4 +73,12 @@
         SELECT * FROM test_paper_question_num;
     </select>
 
+    <update id="changeTestPaperEndStatus">
+        UPDATE test_paper SET `status`=0 WHERE now() > end_time
+    </update>
+
+    <update id="changeTestPaperLaunchStatus">
+        UPDATE test_paper SET `status`=1 WHERE now() > start_time AND end_time > now()
+    </update>
+
 </mapper>

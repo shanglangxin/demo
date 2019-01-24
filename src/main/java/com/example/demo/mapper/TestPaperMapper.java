@@ -36,4 +36,8 @@ public interface TestPaperMapper {
     void addPaperQuestionNum(@Param("testPaperId") Integer id, @Param("questionNumDto") TestQuestionNumDTO questionNumDto);
 
     TestPaperQuestionNumPO queryTestPaperQuestionNumByPaperId(Integer paperId);
+
+    void changeTestPaperEndStatus();
+
+    void changeTestPaperLaunchStatus();
 }
